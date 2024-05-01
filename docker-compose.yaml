@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  nginx:
+    image: nginx:1.18
+    ports:
+      - "1000:443"
+    volumes:
+      - ./src:/var/www/final_zadanie
+      - ./.docker/nginx/conf.d:/etc/nginx/conf.d
+      - ./.docker/nginx/Certifikáty:/etc/nginx/certs
+    depends_on:
+      - php
+
+  php:
+    build: ./.docker/php
+    working_dir: /var/www/final_zadanie
+    volumes:
+      - ./src:/var/www/final_zadanie
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql/mysql-server:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: Almaspite69
+      MYSQL_USER: xpalfy
+      MYSQL_PASSWORD: Almaspite69
+      MYSQL_DATABASE: final_zadanie
+    volumes:
+      - ./.docker/mysql/my.cnf:/etc/mysql/mysql.cnf
+      - ./.database:/docker-entrypoint-initdb.d
+      - mysqldata:/var/lib/mysql
+    healthcheck:
+      test: mysqladmin ping -h 127.0.0.1 -u root --password=$$MYSQL_ROOT_PASSWORD
+      interval: 5s
+      retries: 10
+  
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:5
+    ports:
+      - "1080:80"
+    environment:
+      PMA_HOST: mysql
+    depends_on:
+      - mysql
+
+volumes:
+  mysqldata:
