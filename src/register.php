@@ -1,25 +1,3 @@
-<?php
-require_once 'config.php';
-
-function createUser($username, $password): void
-{
-    $conn = getDatabaseConnection();
-    $stmt = $conn->prepare('INSERT INTO users (username, password, type) VALUES (?, ?, ?)');
-    $type = 1;
-    $stmt->bind_param('ssi', $username, $password, $type);
-    $stmt->execute();
-    $stmt->close();
-    $conn->close();
-}
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-    createUser($username, password_hash($password, PASSWORD_DEFAULT));
-    header('Location: login.php');
-}
-
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -39,28 +17,53 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script src="js/regex.js"></script>
 </head>
 <body>
-<div class="container">
-    <div class="row justify-content-center align-items-center" style="height: 100vh;">
-        <div class="col-sm-10 col-md-10 col-lg-10">
-            <div class="register">
-                <h1 class="text-center mb-5">Registration Form</h1>
-                <form action="" method="post">
-                    <div class="form-group">
-                        <label for="username"><i class="fas fa-user"></i> Username:</label>
-                        <input type="text" class="form-control" id="username" name="username" required
-                               oninput="isValidInput(this)">
-                    </div>
-                    <div class="form-group">
-                        <label for="password"><i class="fas fa-lock"></i> Password:</label>
-                        <input type="password" class="form-control" id="password" name="password" autocomplete="off"
-                               required oninput="isValidPassword(this)">
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-block">Register</button>
-                </form>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <button aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"
+                class="navbar-toggler"
+                data-target="#navbarNav" data-toggle="collapse" type="button">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="login.php">Login</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container h-100">
+    <div class="row justify-content-center align-items-center h-100">
+        <div class="col-sm-10 col-md-10 col-lg-8">
+            <div class="card bg-dark">
+                <div class="card-body">
+                    <h1 class="text-center mb-4">Registration Form</h1>
+                    <form action="" method="post">
+                        <div class="form-group">
+                            <label for="username"><i class="fas fa-user"></i> Username:</label>
+                            <input type="text" class="form-control" id="username" name="username" required
+                                   oninput="isValidInput(this)">
+                        </div>
+                        <div class="form-group">
+                            <label for="password"><i class="fas fa-lock"></i> Password:</label>
+                            <input type="password" class="form-control" id="password" name="password" autocomplete="off"
+                                   required oninput="isValidPassword(this)">
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Register</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
 </div>
+<footer class="page-footer font-small bg-dark">
+    <div class="container">
+        <div class="text-center py-3 text-light">
+            &copy; WebTech 2 - Final Zadanie
+        </div>
+    </div>
+</footer>
 <script>
     let form = document.querySelector('form');
     form.addEventListener('submit', checkForm);
