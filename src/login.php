@@ -13,7 +13,7 @@ function loginUser($username, $password): void
         $stmt->bind_result($id, $username, $hash, $type);
         $stmt->fetch();
         if (password_verify($password, $hash)) {
-            $_SESSION['pro_user'] = ['id' => $id, 'username' => $username, 'type' => $type];
+            $_SESSION['user'] = ['id' => $id, 'username' => $username, 'type' => $type];
             $_SESSION['toast'] = ['type' => 'success', 'message' => 'Login successful!'];
             switch ($type) {
                 case '0':
