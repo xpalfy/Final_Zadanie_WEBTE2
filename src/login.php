@@ -2,40 +2,44 @@
 require_once 'config.php';
 session_start();
 
-function isAlreadyUser($conn, $username): void
+function loginUser($username, $password): void
 {
-    $stmt = $conn->prepare('SELECT id FROM users WHERE username = ?');
+    $conn = getDatabaseConnection();
+    $stmt = $conn->prepare('SELECT id, username, password, type FROM users WHERE username = ?');
     $stmt->bind_param('s', $username);
     $stmt->execute();
     $stmt->store_result();
-    if ($stmt->num_rows > 0) {
-        $stmt->close();
-        $conn->close();
-        header('Location: register.php');
-        $_SESSION['toast'] = ['type' => 'error', 'message' => 'User with this username already exists.'];
-        exit();
+    if ($stmt->num_rows === 1) {
+        $stmt->bind_result($id, $username, $hash, $type);
+        $stmt->fetch();
+        if (password_verify($password, $hash)) {
+            $_SESSION['pro_user'] = ['id' => $id, 'username' => $username, 'type' => $type];
+            $_SESSION['toast'] = ['type' => 'success', 'message' => 'Login successful!'];
+            switch ($type) {
+                case '0':
+                    header('Location: admin/menu.php');
+                    break;
+                case '1':
+                    header('Location: pro_user/menu.php');
+                    break;
+                default:
+                    header('Location: index.php');
+            }
+        } else {
+            $_SESSION['toast'] = ['type' => 'error', 'message' => 'Invalid password!'];
+            header('Location: login.php');
+        }
+    } else {
+        $_SESSION['toast'] = ['type' => 'error', 'message' => 'Invalid username!'];
+        header('Location: login.php');
     }
-}
-
-function createUser($username, $password): void
-{
-    $conn = getDatabaseConnection();
-    isAlreadyUser($conn, $username);
-    $stmt = $conn->prepare('INSERT INTO users (username, password, type) VALUES (?, ?, ?)');
-    $type = 1;
-    $stmt->bind_param('ssi', $username, $password, $type);
-    $stmt->execute();
-    $stmt->close();
     $conn->close();
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'];
     $password = $_POST['password'];
-    createUser($username, password_hash($password, PASSWORD_DEFAULT));
-    $_SESSION['toast'] = ['type' => 'success', 'message' => 'Registration successful! Please login.'];
-    header('Location: login.php');
-    exit();
+    loginUser($username, $password);
 }
 ?>
 <!DOCTYPE html>
@@ -49,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
-    <link rel="stylesheet" href="styles/register.css">
+    <link rel="stylesheet" href="styles/login.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -78,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="login.php">Login</a>
+                    <a class="nav-link" href="register.php">Registration</a>
                 </li>
             </ul>
         </div>
@@ -89,7 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="col-sm-10 col-md-10 col-lg-8">
             <div class="card bg-dark">
                 <div class="card-body">
-                    <h1 class="text-center mb-4">Registration Form</h1>
+                    <h1 class="text-center mb-4">Login Form</h1>
                     <form action="" method="post">
                         <div class="form-group">
                             <label for="username"><i class="fas fa-user"></i> Username:</label>
@@ -101,7 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <input type="password" class="form-control" id="password" name="password" autocomplete="off"
                                    required oninput="isValidPassword(this)">
                         </div>
-                        <button type="submit" class="btn btn-primary btn-block">Register</button>
+                        <button type="submit" class="btn btn-primary btn-block">Login</button>
                     </form>
                 </div>
             </div>
