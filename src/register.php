@@ -30,13 +30,29 @@ function createUser($username, $password): void
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-    createUser($username, password_hash($password, PASSWORD_DEFAULT));
+    $username = filter_input(INPUT_POST, 'username', FILTER_UNSAFE_RAW);
+    $password = filter_input(INPUT_POST, 'password', FILTER_UNSAFE_RAW);
+
+    if (!is_string($username) || strlen($username) > 255) {
+        $_SESSION['toast'] = ['type' => 'error', 'message' => 'Username must be less than 256 characters.'];
+        header('Location: registration.php');
+        exit();
+    }
+
+    if (strlen($password) < 8) {
+        $_SESSION['toast'] = ['type' => 'error', 'message' => 'Password must be at least 8 characters long.'];
+        header('Location: registration.php');
+        exit();
+    }
+
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+    createUser($username, $hashedPassword);
+
     $_SESSION['toast'] = ['type' => 'success', 'message' => 'Registration successful! Please login.'];
     header('Location: login.php');
     exit();
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
