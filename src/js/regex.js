@@ -54,6 +54,16 @@ function isValidInput(inputElement) {
     );
 }
 
+function isValidNumber(inputElement) {
+    const regex = /^\d{5}$/;
+    return validateInput(
+        inputElement,
+        regex,
+        'Number cannot be empty.',
+        'Please enter a valid number.'
+    );
+}
+
 function checkForm(e) {
     e.preventDefault();
     let formIsValid = true;
