@@ -1,59 +1,55 @@
 <?php
-require_once 'config.php';
-session_start();
+require '../checkType.php';
+require '../config.php';
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+check(['0']);
+$conn = getDatabaseConnection();
 
-function isAlreadyUser($conn, $username): void
+function samePassword($password, $conn): bool
 {
-    $stmt = $conn->prepare('SELECT id FROM users WHERE username = ?');
-    $stmt->bind_param('s', $username);
+    $id = $_SESSION['user']['id'];
+    $hash = null;
+    $stmt = $conn->prepare('SELECT password FROM users WHERE id = ?');
+    $stmt->bind_param('i', $id);
     $stmt->execute();
     $stmt->store_result();
-    if ($stmt->num_rows > 0) {
-        $stmt->close();
-        $conn->close();
-        header('Location: register.php');
-        $_SESSION['toast'] = ['type' => 'error', 'message' => 'User with this username already exists.'];
-        exit();
-    }
+    $stmt->bind_result($hash);
+    $stmt->fetch();
+    $stmt->close();
+    return password_verify($password, $hash);
 }
 
-function createUser($username, $password): void
+function changePassword($password, $conn): void
 {
-    $conn = getDatabaseConnection();
-    isAlreadyUser($conn, $username);
-    $stmt = $conn->prepare('INSERT INTO users (username, password, type) VALUES (?, ?, ?)');
-    $type = 1;
-    $stmt->bind_param('ssi', $username, $password, $type);
+    $id = $_SESSION['user']['id'];
+    $password = password_hash($password, PASSWORD_DEFAULT);
+    $stmt = $conn->prepare('UPDATE users SET password = ? WHERE id = ?');
+    $stmt->bind_param('si', $password, $id);
     $stmt->execute();
     $stmt->close();
-    $conn->close();
-}
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = filter_input(INPUT_POST, 'username', FILTER_UNSAFE_RAW);
-    $password = filter_input(INPUT_POST, 'password', FILTER_UNSAFE_RAW);
-
-    if (!is_string($username) || strlen($username) > 255) {
-        $_SESSION['toast'] = ['type' => 'error', 'message' => 'Username must be less than 256 characters.'];
-        header('Location: registration.php');
-        exit();
-    }
-
-    if (strlen($password) < 8) {
-        $_SESSION['toast'] = ['type' => 'error', 'message' => 'Password must be at least 8 characters long.'];
-        header('Location: registration.php');
-        exit();
-    }
-
-    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-    createUser($username, $hashedPassword);
-
-    $_SESSION['toast'] = ['type' => 'success', 'message' => 'Registration successful! Please login.'];
-    header('Location: login.php');
+    $_SESSION['toast'] = [
+        'type' => 'success',
+        'message' => 'Password changed successfully'
+    ];
+    header('Location: profile.php');
     exit();
 }
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $password = $_POST['password'];
+    if (samePassword($password, $conn)) {
+        $_SESSION['toast'] = [
+            'type' => 'error',
+            'message' => 'New password must be different from the old one'
+        ];
+    } else {
+        changePassword($password, $conn);
+    }
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -61,17 +57,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Registration Form</title>
+    <title>Profile</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
-    <link rel="stylesheet" href="styles/base.css">
-    <link rel="stylesheet" href="styles/register.css">
+    <link rel="stylesheet" href="../styles/base.css">
+    <link rel="stylesheet" href="../styles/profile.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-    <script src="js/regex.js"></script>
+    <script src="../js/regex.js"></script>
 </head>
 <body>
 <script>
@@ -95,37 +91,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="index.php">Menu</a>
+                    <a class="nav-link" href="menu.php">Menu</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="login.php">Login</a>
+                    <a class="nav-link" href="profile.php">Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../logout.php">Logout</a>
                 </li>
             </ul>
         </div>
     </div>
 </nav>
+
 <div class="container cont justify-content-center align-items-center">
     <div class="col-sm-10 col-md-10 col-lg-8">
         <div class="card bg-dark">
+            <div class="col-12 d-flex flex-column flex-sm-row justify-content-between align-items-center">
+                <div class="mr-2 mb-2">
+                    <h1 class="mt-3 mb-1">Change</br> password</h1>
+                    <h5 class="card-title">Username: <?php echo $_SESSION['user']['username']; ?></h5>
+                </div>
+                <img src="../img/profile/2.png" alt="avatar" class="avatar img-fluid mt-responsive ml-3 mr-3">
+            </div>
             <div class="card-body">
-                <h1 class="text-center mb-4">Registration Form</h1>
                 <form action="" method="post">
                     <div class="form-group">
-                        <label for="username"><i class="fas fa-user"></i> Username:</label>
-                        <input type="text" class="form-control" id="username" name="username" required
-                               oninput="isValidInput(this)">
-                    </div>
-                    <div class="form-group">
                         <label for="password"><i class="fas fa-lock"></i> Password:</label>
-                        <input type="password" class="form-control" id="password" name="password" autocomplete="off"
-                               required oninput="isValidPassword(this)">
+                        <input type="password" name="password" id="password" class="form-control" autocomplete="off"
+                               placeholder="*******" required oninput="isValidPassword(this)">
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block">Register</button>
+                    <button type="submit" class="btn btn-primary">Change</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
 <footer class="page-footer font-small bg-dark">
     <div class="container">
         <div class="text-center py-3 text-light">

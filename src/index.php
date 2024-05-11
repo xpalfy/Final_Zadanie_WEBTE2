@@ -1,27 +1,30 @@
 <?php
-
-function redirectUser($number)
+function redirectUser($key)
 {
     if (session_status() === PHP_SESSION_NONE) {
         session_start();
     }
 
-    if (empty($number) || !preg_match('/^\d{5}$/', $number)) {
-        $_SESSION['toast'] = ['type' => 'error', 'message' => 'Number must be exactly five digits long.'];
+
+    if (!preg_match('/^[a-zA-Z0-9]{5}$/', $key)) {
+        $_SESSION['toast'] = [
+            'type' => 'error',
+            'message' => 'Invalid key format'
+        ];
         header('Location: index.php');
         exit();
     }
 
-    $_SESSION['number'] = (int)$number;
-    $link = 'question.php?number=' . $number;
+    $_SESSION['key'] = (int)$key;
+    $link = 'question.php?number=' . $key;
     header('Location: ' . $link);
     exit();
 }
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $number = $_POST['number'];
-    redirectUser($number);
+    $key = $_POST['key'];
+    redirectUser($key);
 }
 ?>
 <!DOCTYPE html>
@@ -74,21 +77,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
 </nav>
-<div class="container h-100">
-    <div class="row justify-content-center align-items-center h-100">
-        <div class="col-sm-10 col-md-10 col-lg-8">
-            <div class="card bg-dark">
-                <div class="card-body">
-                    <h1 class="text-center mb-4">Question number</h1>
-                    <form action="" method="post">
-                        <div class="form-group">
-                            <label for="number"><i class="fas fa-hashtag"></i> Number:</label>
-                            <input type="text" class="form-control" id="number" name="number" required
-                                   oninput="isValidNumber(this)">
-                        </div>
-                        <button type="submit" class="btn btn-primary btn-block">Submit</button>
-                    </form>
-                </div>
+<div class="container cont justify-content-center align-items-center">
+    <div class="col-sm-10 col-md-10 col-lg-8">
+        <div class="card bg-dark">
+            <div class="card-body">
+                <h1 class="text-center mb-4">Question key</h1>
+                <form action="" method="post">
+                    <div class="form-group">
+                        <label for="key"><i class="fas fa-hashtag"></i> Key:</label>
+                        <input type="text" class="form-control" id="number" name="key" required
+                               oninput="isValidKey(this)">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Submit</button>
+                </form>
             </div>
         </div>
     </div>

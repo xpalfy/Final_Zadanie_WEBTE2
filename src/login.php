@@ -28,10 +28,12 @@ function loginUser($username, $password): void
         } else {
             $_SESSION['toast'] = ['type' => 'error', 'message' => 'Invalid password!'];
             header('Location: login.php');
+            exit();
         }
     } else {
         $_SESSION['toast'] = ['type' => 'error', 'message' => 'Invalid username!'];
         header('Location: login.php');
+        exit();
     }
     $conn->close();
 }
@@ -92,26 +94,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
 </nav>
-<div class="container h-100">
-    <div class="row justify-content-center align-items-center h-100">
-        <div class="col-sm-10 col-md-10 col-lg-8">
-            <div class="card bg-dark">
-                <div class="card-body">
-                    <h1 class="text-center mb-4">Login Form</h1>
-                    <form action="" method="post">
-                        <div class="form-group">
-                            <label for="username"><i class="fas fa-user"></i> Username:</label>
-                            <input type="text" class="form-control" id="username" name="username" required
-                                   oninput="isValidInput(this)">
-                        </div>
-                        <div class="form-group">
-                            <label for="password"><i class="fas fa-lock"></i> Password:</label>
-                            <input type="password" class="form-control" id="password" name="password" autocomplete="off"
-                                   required oninput="isValidPassword(this)">
-                        </div>
-                        <button type="submit" class="btn btn-primary btn-block">Login</button>
-                    </form>
-                </div>
+<div class="container cont justify-content-center align-items-center">
+    <div class="col-sm-10 col-md-10 col-lg-8">
+        <div class="card bg-dark">
+            <div class="card-body">
+                <h1 class="text-center mb-4">Login Form</h1>
+                <form action="" method="post">
+                    <div class="form-group">
+                        <label for="username"><i class="fas fa-user"></i> Username:</label>
+                        <input type="text" class="form-control" id="username" name="username" required
+                               oninput="isValidInput(this)">
+                    </div>
+                    <div class="form-group">
+                        <label for="password"><i class="fas fa-lock"></i> Password:</label>
+                        <input type="password" class="form-control" id="password" name="password" autocomplete="off"
+                               required oninput="isValidPassword(this)">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Login</button>
+                </form>
             </div>
         </div>
     </div>

@@ -54,13 +54,13 @@ function isValidInput(inputElement) {
     );
 }
 
-function isValidNumber(inputElement) {
-    const regex = /^\d{5}$/;
+function isValidKey(inputElement) {
+    const regex = /^[a-zA-Z\d]{5}$/;
     return validateInput(
         inputElement,
         regex,
-        'Number cannot be empty.',
-        'Please enter a valid number.'
+        'Key cannot be empty.',
+        'Key must be exactly 5 characters long.'
     );
 }
 
