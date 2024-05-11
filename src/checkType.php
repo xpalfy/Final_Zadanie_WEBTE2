@@ -10,6 +10,7 @@ function check($allowedTypes = []): void
     if (!in_array($type, $allowedTypes)) {
         session_unset();
         session_destroy();
+        $_SESSION['toast'] = ['type' => 'error', 'message' => 'You do not have permission to access this page!'];
         header('Location: /login.php');
         exit();
     }

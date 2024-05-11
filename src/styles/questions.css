@@ -1,0 +1,43 @@
+.cont{
+    min-height: 100vh;
+}
+
+.navbar {
+    border-bottom: 1px solid #ffffff;
+}
+
+footer {
+    border-top: 1px solid #ffffff;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #004085;
+}
+
+.nav-link {
+    color: #adb5bd;
+    opacity: 0.85;
+}
+
+.nav-link:hover {
+    color: #f8f9fb;
+    opacity: 1;
+}
+
+textarea {
+    resize: none;
+}
+
+@media (min-width: 866px) {
+    table.dataTable thead th,
+    table.dataTable tbody td {
+        text-align: center;
+    }
+}
+

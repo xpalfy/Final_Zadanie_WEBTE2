@@ -2,6 +2,7 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+
 require '../checkType.php';
 check(['1']);
 ?>
@@ -30,6 +31,7 @@ check(['1']);
 <script>
     function checkToasts() {
         let toast = <?php echo json_encode($_SESSION['toast'] ?? null); ?>;
+        console.log(toast);
         if (toast) {
             toastr[toast.type](toast.message);
             <?php unset($_SESSION['toast']); ?>
@@ -51,6 +53,9 @@ check(['1']);
                     <a class="nav-link" href="menu.php">Menu</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="questions.php">Questions</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="profile.php">Profile</a>
                 </li>
                 <li class="nav-item">
@@ -60,7 +65,7 @@ check(['1']);
         </div>
     </div>
 </nav>
-<div class="container justify-content-center align-items-center d-flex" style="height: 100vh;">
+<div class="container cont justify-content-center align-items-center d-flex">
     <div class="col-sm-10 col-md-10 col-lg-8">
         <div class="card bg-dark text-center">
             <div class="card-body">

@@ -3,7 +3,7 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 require '../checkType.php';
-check(['1']);
+check(['0']);
 ?>
 
 <!DOCTYPE html>

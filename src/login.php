@@ -1,6 +1,8 @@
 <?php
 require_once 'config.php';
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 function loginUser($username, $password): void
 {
@@ -18,12 +20,13 @@ function loginUser($username, $password): void
             switch ($type) {
                 case '0':
                     header('Location: admin/menu.php');
-                    break;
+                    exit();
                 case '1':
                     header('Location: pro_user/menu.php');
-                    break;
+                    exit();
                 default:
                     header('Location: index.php');
+                    exit();
             }
         } else {
             $_SESSION['toast'] = ['type' => 'error', 'message' => 'Invalid password!'];
