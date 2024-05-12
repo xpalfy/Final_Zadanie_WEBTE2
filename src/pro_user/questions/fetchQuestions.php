@@ -14,8 +14,8 @@ if (!$conn) {
     exit();
 }
 
-$sql_1 = "SELECT * FROM questions WHERE creator == " . $_SESSION['user']['id'];
-$sql_2 = "SELECT * FROM abc_questions WHERE creator == " . $_SESSION['user']['id'];
+$sql_1 = "SELECT * FROM questions WHERE creator = '" . $_SESSION['user']['id'] . "'";
+$sql_2 = "SELECT * FROM abc_questions WHERE creator = '" . $_SESSION['user']['id'] . "'";
 $result_1 = $conn->query($sql_1);
 $result_2 = $conn->query($sql_2);
 
@@ -26,8 +26,9 @@ if ($result_1 && $result_2) {
             'id' => $row['id'],
             'question' => $row['question'],
             'category' => $row['category'],
-            'type' => 'Simple',
-            'active' => $row['active'] ? 'true' : 'false'
+            'type' => 'One Answer',
+            'active' => $row['active'] ? 'true' : 'false',
+            'qr_code' => $row['qr_code']
         ];
     }
     while ($row = $result_2->fetch_assoc()) {
@@ -35,8 +36,9 @@ if ($result_1 && $result_2) {
             'id' => $row['id'],
             'question' => $row['question'],
             'category' => $row['category'],
-            'type' => 'ABC',
-            'active' => $row['active']? 'true' : 'false'
+            'type' => 'Multiple Choice',
+            'active' => $row['active']? 'true' : 'false',
+            'qr_code' => $row['qr_code']
         ];
     }
     header('Content-Type: application/json');
