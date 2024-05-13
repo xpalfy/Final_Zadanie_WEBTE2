@@ -74,12 +74,10 @@ check(['1']);
                 <option value="">All Categories</option>
             </select>
         </div>
-        <div class="form-group mb-5">
-            <label for="filterType">Filter by Type:</label>
-            <select id="filterType" class="form-control">
-                <option value="">All Types</option>
-                <option value="One Answer">One Answer</option>
-                <option value="Multiple Choice">Multiple Choice</option>
+        <div class="form-group">
+            <label for="filterTime">Filter by Time:</label>
+            <select id="filterTime" class="form-control">
+                <option value="">All Time</option>
             </select>
         </div>
     </div>
@@ -88,7 +86,7 @@ check(['1']);
         <tr>
             <th>Question</th>
             <th>Category</th>
-            <th>Type</th>
+            <th>Time</th>
             <th>Change</th>
             <th>Delete</th>
             <th>Activate</th>
@@ -246,9 +244,30 @@ check(['1']);
         });
     }
 
+    function loadTime() {
+        $.ajax({
+            url: './questions/fetchTime.php',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                if (data.success) {
+                    $('#filterTime').empty().append('<option value="">All Time</option>');
+                    data.created_dates.forEach(function (date) {
+                        $('#filterTime').append($('<option>').text(date).val(date));
+                    });
+                } else {
+                    toastr.error(data.message || 'Error loading time.');
+                }
+            },
+            error: function () {
+                toastr.error('Failed to load time.');
+            }
+        });
+    }
+
     function fetchQuestions() {
         let currentCategory = $('#filterCategory').val();
-        let currentType = $('#filterType').val();
+        let currentTime = $('#filterTime').val();
         $.ajax({
             url: './questions/fetchQuestions.php',
             type: 'GET',
@@ -259,8 +278,8 @@ check(['1']);
                     responsive: true,
                     columns: [
                         {data: 'question', title: 'Question'},
-                        {data: 'category', title: 'Category'},
-                        {data: 'type', title: 'Type'},
+                        {data: 'category', title: 'Category',visible: false},
+                        {data: 'time', title: 'Time',visible: false},
                         {
                             data: 'id',
                             title: 'Change',
@@ -289,7 +308,7 @@ check(['1']);
                             data: 'id',
                             title: 'QR Code',
                             render: function (data, type, row) {
-                                return `<button onclick="generateQRCode('${row.qr_code}')" class="btn btn-primary btn-sm" style="min-width: 80%;">QR Code</button>`;
+                                return `<button onclick="generateQRCode('${row.qr_code}', '${row.type}')" class="btn btn-primary btn-sm" style="min-width: 80%;">QR Code</button>`;
                             },
                             orderable: false
                         }
@@ -298,20 +317,31 @@ check(['1']);
                         $('td', row).css('text-align', 'center');
                     },
                     initComplete: function () {
-                        let api = this.api();
+                        var api = this.api();
 
                         $('#filterCategory').on('change', function () {
                             api.column(1).search(this.value).draw();
                         });
 
-                        $('#filterType').on('change', function () {
+                        $('#filterTime').on('change', function () {
                             api.column(2).search(this.value).draw();
                         });
 
-                        $('#filterCategory').val(currentCategory);
-                        $('#filterType').val(currentType);
-                        api.column(1).search(currentCategory).draw();
-                        api.column(2).search(currentType).draw();
+                        if ($('#filterCategory option[value="' + currentCategory + '"]').length > 0) {
+                            $('#filterCategory').val(currentCategory);
+                        } else {
+                            $('#filterCategory').val(''); // Revert to default if not found
+                        }
+
+                        // Check and set 'Time'
+                        if ($('#filterTime option[value="' + currentTime + '"]').length > 0) {
+                            $('#filterTime').val(currentTime);
+                        } else {
+                            $('#filterTime').val(''); // Revert to default if not found
+                        }
+
+                        api.column(1).search($('#filterCategory').val()).draw(); // Adjust column index if necessary
+                        api.column(2).search($('#filterTime').val()).draw();      // Adjust column index if necessary
                     }
                 });
             },
@@ -322,7 +352,7 @@ check(['1']);
     }
 
     function generateQRCode(qrCode) {
-        let fullUrl = `https://node84.webte.fei.stuba.sk:1000/question.php?key=${qrCode}`;
+        let fullUrl = `https://node84.webte.fei.stuba.sk:1000/question.php?qr_code=${qrCode}`;
         Swal.fire({
             title: 'QR Code',
             text: 'Scan the QR code to view the question',
@@ -403,9 +433,10 @@ check(['1']);
                     $('#changeQuestionModal').modal('hide');
                     toastr.success('Question updated successfully!');
                     $('#questionsTable').DataTable().clear().destroy();
-                    fetchQuestions();
                     loadCategories();
+                    loadTime();
                     clearChangeModal();
+                    fetchQuestions();
                 } else {
                     toastr.error(data.message || 'Error updating question.');
                 }
@@ -436,15 +467,17 @@ check(['1']);
                     success: function (data) {
                         if (data.success) {
                             $('#questionsTable').DataTable().clear().destroy();
-                            fetchQuestions();
                             loadCategories();
+                            loadTime();
+                            fetchQuestions();
+                            $('#filterType').val('');
                             toastr.success('Question deleted successfully!');
                         } else {
-                            toastr.error(data.message || 'Error deleting question. Please try again.');
+                            toastr.error(data.message || 'Error deleting question.');
                         }
                     },
                     error: function () {
-                        toastr.error('Failed to delete question. Please try again.');
+                        toastr.error('Failed to delete question.');
                     }
                 });
             }
@@ -522,6 +555,7 @@ check(['1']);
 
     $(document).ready(function () {
         loadCategories();
+        loadTime();
         $('#addQuestionModal').on('hidden.bs.modal', function () {
             clearAddModal();
         });
@@ -562,8 +596,9 @@ check(['1']);
                         $('#addQuestionModal').modal('hide');
                         $('#questionsTable').DataTable().clear().destroy();
                         clearAddModal();
-                        fetchQuestions();
                         loadCategories();
+                        loadTime();
+                        fetchQuestions();
                     } else {
                         toastr.error(data.message || 'Error adding question. Please try again.');
                     }
