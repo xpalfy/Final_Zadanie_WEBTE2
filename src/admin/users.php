@@ -103,7 +103,7 @@ check(['0']);
                 <form id="addQuestionForm">
                     <div class="form-group">
                         <label for="userType">Select user type:</label>
-                        <select class="form-control" id="addUserModal" name="addUserModal" required>
+                        <select class="form-control" id="addUserTypeModal" name="addUserTypeModal" required>
                             <option value="1" selected>Admin</option>
                             <option value="2">Pro User</option>
                         </select>
@@ -143,8 +143,8 @@ check(['0']);
                     <div class="form-group">
                         <label for="changeQuestionType">Select user type:</label>
                         <select class="form-control" id="changeQuestionType" name="questionType" required>
-                            <option value="1">Admin</option>
-                            <option value="2">Pro User</option>
+                            <option value="0">Admin</option>
+                            <option value="1">Pro User</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -155,7 +155,7 @@ check(['0']);
                     <div class="form-group">
                         <label for="changeQuestionCategory">Password</label>
                         <input type="password" class="form-control" id="changeUserPassword" name="changeUserPassword"
-                               autocomplete="off" required oninput="isValidPassword(this)">
+                               autocomplete="off" placeholder="*******" oninput="isValidPassword(this)">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -210,6 +210,87 @@ check(['0']);
         });
     }
 
+    function addUser() {
+        let username = $('#username').val();
+        let password = $('#userPassword').val();
+        let type = $('#addUserTypeModal').val();
+        $.ajax({
+            type: 'POST',
+            url: './users/addUser.php',
+            contentType: 'application/json',
+            data: JSON.stringify({username: username, password: password, type: type}),
+            dataType: 'json',
+            success: function (data) {
+                if (data.success) {
+                    $('#addUserModal').modal('hide');
+                    $('#userTable').DataTable().clear().destroy();
+                    clearAddModal();
+                    fetchUsers();
+                    toastr.success('User added successfully.');
+                } else {
+                    toastr.error(data.message);
+                }
+            },
+            error: function () {
+                toastr.error('Failed to add the user. Please try again.');
+            }
+        });
+    }
+
+    function changeUser(id) {
+        $.ajax({
+            type: 'POST',
+            url: './users/fetchUser.php',
+            contentType: 'application/json',
+            data: JSON.stringify({id: id}),
+            dataType: 'json',
+            success: function (data) {
+                if (data.success) {
+                    $('#changeUserID').val(data.data.id);
+                    $('#changeUsername').val(data.data.username);
+                    $('#changeQuestionType').val(data.data.type);
+                    $('#changeUserModal').modal('show');
+                } else {
+                    toastr.error('Failed to load the user. Please try again.');
+                }
+            },
+            error: function () {
+                toastr.error('Failed to load the user. Please try again.');
+            }
+        });
+    }
+    $("#changeUserForm").on('submit', function (e) {
+        e.preventDefault();
+        if (!checkChangeUser()) {
+            return;
+        }
+        let id = $('#changeUserID').val();
+        let username = $('#changeUsername').val();
+        let password = $('#changeUserPassword').val();
+        let type = $('#changeQuestionType').val();
+        $.ajax({
+            type: 'POST',
+            url: './users/changeUser.php',
+            contentType: 'application/json',
+            data: JSON.stringify({id: id, username: username, password: password, type: type}),
+            dataType: 'json',
+            success: function (data) {
+                if (data.success) {
+                    $('#changeUserModal').modal('hide');
+                    $('#userTable').DataTable().clear().destroy();
+                    clearChangeModal();
+                    fetchUsers();
+                    toastr.success('User changed successfully.');
+                } else {
+                    toastr.error(data.message);
+                }
+            },
+            error: function () {
+                toastr.error('Failed to change the user. Please try again.');
+            }
+        });
+    });
+
     function deleteUser(id, type) {
         Swal.fire({
             title: 'Are you sure?',
@@ -244,7 +325,39 @@ check(['0']);
         });
     }
 
+    function clearAddModal() {
+        removeError('username');
+        removeError('userPassword');
+        removeSuccess('username');
+        removeSuccess('userPassword');
+        $('#username').val('');
+        $('#userPassword').val('');
+    }
+    function clearChangeModal() {
+        removeError('changeUsername');
+        removeError('changeUserPassword');
+        removeSuccess('changeUsername');
+        removeSuccess('changeUserPassword');
+        $('#changeUsername').val('');
+        $('#changeUserPassword').val('');
+    }
+
     $(document).ready(function () {
         fetchUsers();
+
+        $('#addUserModal').on('hidden.bs.modal', function () {
+            clearAddModal();
+        });
+        $('#changeUserModal').on('hidden.bs.modal', function () {
+            clearChangeModal();
+        });
+
+        $('#addUserModal').on('submit', function (e) {
+            e.preventDefault();
+            if (!checkAddUser()) {
+                return;
+            }
+            addUser();
+        });
     });
 </script>

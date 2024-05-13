@@ -189,3 +189,37 @@ function checkFormChange() {
     return true;
 }
 
+function checkChangeUser() {
+    let formIsValid = true;
+    let username = document.getElementById('changeUsername');
+    let password = document.getElementById('changeUserPassword');
+    if (!isValidInput(username)) {
+        formIsValid = false;
+    }
+    if (!isValidPassword(password)) {
+        formIsValid = false;
+    }
+    if (!formIsValid) {
+        toastr.error('Please fill in the form correctly.');
+        return false;
+    }
+    return true;
+}
+
+function checkAddUser() {
+    let formIsValid = true;
+    let username = document.getElementById('username');
+    let password = document.getElementById('userPassword');
+    if (!isValidInput(username)) {
+        formIsValid = false;
+    }
+    if (!isValidPassword(password)) {
+        formIsValid = false;
+    }
+    if (!formIsValid) {
+        toastr.error('Please fill in the form correctly.');
+        return false;
+    }
+    return true;
+}
+
