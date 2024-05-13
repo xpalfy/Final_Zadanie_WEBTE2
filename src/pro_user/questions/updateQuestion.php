@@ -6,7 +6,7 @@ if (session_status() === PHP_SESSION_NONE) {
 require '../../checkType.php';
 require '../../config.php';
 
-check(['0']);
+check(['1']);
 $conn = getDatabaseConnection();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
