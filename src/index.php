@@ -16,7 +16,7 @@ function redirectUser($key)
     }
 
     $_SESSION['key'] = (int)$key;
-    $link = 'question.php?number=' . $key;
+    $link = 'question.php?key=' . $key;
     header('Location: ' . $link);
     exit();
 }

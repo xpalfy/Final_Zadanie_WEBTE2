@@ -5,11 +5,11 @@ if (session_status() === PHP_SESSION_NONE) {
 require '../../checkType.php';
 require '../../config.php';
 
-check(['1']);
+check(['0']);
 $conn = getDatabaseConnection();
 
-$result_1 = $conn->query("SELECT DISTINCT category FROM questions WHERE creator = {$_SESSION['user']['id']} ORDER BY category ASC");
-$result_2 = $conn->query("SELECT DISTINCT category FROM abc_questions WHERE creator = {$_SESSION['user']['id']} ORDER BY category ASC");
+$result_1 = $conn->query("SELECT DISTINCT category FROM questions ORDER BY category ASC");
+$result_2 = $conn->query("SELECT DISTINCT category FROM abc_questions ORDER BY category ASC");
 $categories = [];
 while ($row = $result_1->fetch_assoc()) {
     $categories[] = $row['category'];

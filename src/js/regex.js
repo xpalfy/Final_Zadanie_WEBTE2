@@ -65,8 +65,18 @@ function isValidPassword(inputElement) {
     );
 }
 
-function isValidInput(inputElement) {
+function isValidText(inputElement) {
     const regex = /^\p{Lu}[\p{L}\d\s,']*$/u;
+    return validateInput(
+        inputElement,
+        regex,
+        'Input cannot be empty.',
+        'Please enter a valid string.'
+    );
+}
+
+function isValidInput(inputElement) {
+    const regex = /^[\p{L}\d\s,']+$/u;
     return validateInput(
         inputElement,
         regex,
@@ -121,20 +131,20 @@ function checkFormAdd() {
     if (!isValidQuestion(question)) {
         formIsValid = false;
     }
-    if (!isValidInput(category)) {
+    if (!isValidText(category)) {
         formIsValid = false;
     }
     if (type.value === '2') {
         let a = document.getElementById('optionA');
         let b = document.getElementById('optionB');
         let c = document.getElementById('optionC');
-        if (!isValidInput(a)) {
+        if (!isValidText(a)) {
             formIsValid = false;
         }
-        if (!isValidInput(b)) {
+        if (!isValidText(b)) {
             formIsValid = false;
         }
-        if (!isValidInput(c)) {
+        if (!isValidText(c)) {
             formIsValid = false;
         }
     }
@@ -154,20 +164,20 @@ function checkFormChange() {
     if (!isValidQuestion(question)) {
         formIsValid = false;
     }
-    if (!isValidInput(category)) {
+    if (!isValidText(category)) {
         formIsValid = false;
     }
     if (type.value === '2') {
         let a = document.getElementById('changeOptionA');
         let b = document.getElementById('changeOptionB');
         let c = document.getElementById('changeOptionC');
-        if (!isValidInput(a)) {
+        if (!isValidText(a)) {
             formIsValid = false;
         }
-        if (!isValidInput(b)) {
+        if (!isValidText(b)) {
             formIsValid = false;
         }
-        if (!isValidInput(c)) {
+        if (!isValidText(c)) {
             formIsValid = false;
         }
     }

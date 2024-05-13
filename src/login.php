@@ -105,13 +105,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <form action="" method="post">
                     <div class="form-group">
                         <label for="username"><i class="fas fa-user"></i> Username:</label>
-                        <input type="text" class="form-control" id="username" name="username" required
-                               oninput="isValidInput(this)">
+                        <input type="text" class="form-control" id="username" name="username" required>
                     </div>
                     <div class="form-group">
                         <label for="password"><i class="fas fa-lock"></i> Password:</label>
                         <input type="password" class="form-control" id="password" name="password" autocomplete="off"
-                               required oninput="isValidPassword(this)">
+                               required>
                     </div>
                     <button type="submit" class="btn btn-primary btn-block">Login</button>
                 </form>

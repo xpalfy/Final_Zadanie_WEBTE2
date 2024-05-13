@@ -4,7 +4,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 require '../../checkType.php';
 require '../../config.php';
-check(['1']);
+check(['0']);
 
 $conn = getDatabaseConnection();
 $active = 1;

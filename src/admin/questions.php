@@ -3,7 +3,7 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 require '../checkType.php';
-check(['1']);
+check(['0']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -74,12 +74,18 @@ check(['1']);
                 <option value="">All Categories</option>
             </select>
         </div>
-        <div class="form-group mb-5">
+        <div class="form-group">
             <label for="filterType">Filter by Type:</label>
             <select id="filterType" class="form-control">
                 <option value="">All Types</option>
                 <option value="One Answer">One Answer</option>
                 <option value="Multiple Choice">Multiple Choice</option>
+            </select>
+        </div>
+        <div class="form-group mb-5">
+            <label for="filterUser">Filter by User:</label>
+            <select id="filterUser" class="form-control">
+                <option value="">All Users</option>
             </select>
         </div>
     </div>
@@ -88,6 +94,7 @@ check(['1']);
         <tr>
             <th>Question</th>
             <th>Category</th>
+            <th>Creator</th>
             <th>Type</th>
             <th>Change</th>
             <th>Delete</th>
@@ -246,6 +253,27 @@ check(['1']);
         });
     }
 
+    function loadUsers() {
+        $.ajax({
+            url: './questions/fetchUsers.php',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                if (data.success) {
+                    $('#filterUser').empty().append('<option value="">All Users</option>');
+                    data.users.forEach(function (user) {
+                        $('#filterUser').append($('<option>').text(user).val(user));
+                    });
+                } else {
+                    toastr.error(data.message || 'Error loading users.');
+                }
+            },
+            error: function () {
+                toastr.error('Failed to load users.');
+            }
+        });
+    }
+
     function fetchQuestions() {
         $.ajax({
             url: './questions/fetchQuestions.php',
@@ -258,6 +286,7 @@ check(['1']);
                     columns: [
                         {data: 'question', title: 'Question'},
                         {data: 'category', title: 'Category'},
+                        {data: "creator", title: "Creator"},
                         {data: 'type', title: 'Type'},
                         {
                             data: 'id',
@@ -287,7 +316,7 @@ check(['1']);
                             data: 'id',
                             title: 'QR Code',
                             render: function (data, type, row) {
-                                return `<button onclick="generateQRCode('${row.qr_code}')" class="btn btn-primary btn-sm" style="min-width: 80%;">QR Code</button>`;
+                                return `<button onclick="generateQRCode('${row.qr_code}', '${row.type}')" class="btn btn-primary btn-sm" style="min-width: 80%;">QR Code</button>`;
                             },
                             orderable: false
                         }
@@ -303,6 +332,10 @@ check(['1']);
                         });
 
                         $('#filterType').on('change', function () {
+                            api.column(3).search(this.value).draw();
+                        });
+
+                        $('#filterUser').on('change', function () {
                             api.column(2).search(this.value).draw();
                         });
                     }
@@ -314,8 +347,13 @@ check(['1']);
         });
     }
 
-    function generateQRCode(qrCode) {
-        let fullUrl = `https://node84.webte.fei.stuba.sk:1000/question.php?key=${qrCode}`;
+    function generateQRCode(qrCode, type) {
+        if (type === 'Multiple Choice') {
+            type = 1;
+        } else {
+            type = 2;
+        }
+        let fullUrl = `https://node84.webte.fei.stuba.sk:1000/question.php?qr_code=${qrCode}&type=${type}`;
         Swal.fire({
             title: 'QR Code',
             text: 'Scan the QR code to view the question',
@@ -527,6 +565,7 @@ check(['1']);
 
     $(document).ready(function () {
         loadCategories();
+        loadUsers();
         $('#addQuestionModal').on('hidden.bs.modal', function () {
             clearAddModal();
         });
