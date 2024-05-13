@@ -13,8 +13,10 @@ $conn = getDatabaseConnection();
 
 $conn->query("SET time_zone = '+01:00'");
 
-$result_1 = $conn->query("SELECT DISTINCT created_at FROM questions WHERE creator = {$_SESSION['user']['id']} ORDER BY created_at ASC");
-$result_2 = $conn->query("SELECT DISTINCT created_at FROM abc_questions WHERE creator = {$_SESSION['user']['id']} ORDER BY created_at ASC");
+$result_1 = $conn->query("SELECT DISTINCT DATE(created_at) AS created_date FROM questions ORDER BY created_date ASC");
+
+$result_2 = $conn->query("SELECT DISTINCT DATE(created_at) AS created_date FROM abc_questions ORDER BY created_date ASC");
+
 $created_dates = [];
 
 while ($row = $result_1->fetch_assoc()) {

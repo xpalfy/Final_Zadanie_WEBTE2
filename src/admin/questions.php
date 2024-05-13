@@ -54,6 +54,9 @@ check(['0']);
                     <a class="nav-link" href="menu.php">Menu</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="users.php">Users</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="questions.php">Questions</a>
                 </li>
                 <li class="nav-item">
@@ -75,11 +78,9 @@ check(['0']);
             </select>
         </div>
         <div class="form-group">
-            <label for="filterType">Filter by Type:</label>
-            <select id="filterType" class="form-control">
-                <option value="">All Types</option>
-                <option value="One Answer">One Answer</option>
-                <option value="Multiple Choice">Multiple Choice</option>
+            <label for="filterTime">Filter by Time:</label>
+            <select id="filterTime" class="form-control">
+                <option value="">All Time</option>
             </select>
         </div>
         <div class="form-group mb-5">
@@ -95,7 +96,7 @@ check(['0']);
             <th>Question</th>
             <th>Category</th>
             <th>Creator</th>
-            <th>Type</th>
+            <th>Time</th>
             <th>Change</th>
             <th>Delete</th>
             <th>Activate</th>
@@ -253,6 +254,27 @@ check(['0']);
         });
     }
 
+    function loadTime() {
+        $.ajax({
+            url: './questions/fetchTime.php',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                if (data.success) {
+                    $('#filterTime').empty().append('<option value="">All Time</option>');
+                    data.created_dates.forEach(function (date) {
+                        $('#filterTime').append($('<option>').text(date).val(date));
+                    });
+                } else {
+                    toastr.error(data.message || 'Error loading time.');
+                }
+            },
+            error: function () {
+                toastr.error('Failed to load time.');
+            }
+        });
+    }
+
     function loadUsers() {
         $.ajax({
             url: './questions/fetchUsers.php',
@@ -275,19 +297,22 @@ check(['0']);
     }
 
     function fetchQuestions() {
+        let currentCategory = $('#filterCategory').val();
+        let currentTime = $('#filterTime').val();
+        let currentUser = $('#filterUser').val();
         $.ajax({
             url: './questions/fetchQuestions.php',
             type: 'GET',
             dataType: 'json',
             success: function (data) {
                 $('#questionsTable').DataTable({
+                    data: data.data,
                     responsive: true,
-                    ajax: './questions/fetchQuestions.php',
                     columns: [
                         {data: 'question', title: 'Question'},
-                        {data: 'category', title: 'Category'},
-                        {data: "creator", title: "Creator"},
-                        {data: 'type', title: 'Type'},
+                        {data: 'category', title: 'Category',visible: false},
+                        {data: "creator", title: "Creator",visible: false},
+                        {data: 'time', title: 'Time',visible: false},
                         {
                             data: 'id',
                             title: 'Change',
@@ -331,13 +356,38 @@ check(['0']);
                             api.column(1).search(this.value).draw();
                         });
 
-                        $('#filterType').on('change', function () {
+                        $('#filterTime').on('change', function () {
                             api.column(3).search(this.value).draw();
                         });
 
                         $('#filterUser').on('change', function () {
                             api.column(2).search(this.value).draw();
                         });
+
+                        if ($('#filterCategory option[value="' + currentCategory + '"]').length > 0) {
+                            $('#filterCategory').val(currentCategory);
+                        } else {
+                            $('#filterCategory').val(''); // Revert to default if not found
+                        }
+
+                        // Check and set 'Time'
+                        if ($('#filterTime option[value="' + currentTime + '"]').length > 0) {
+                            $('#filterTime').val(currentTime);
+                        } else {
+                            $('#filterTime').val(''); // Revert to default if not found
+                        }
+
+                        // Check and set 'User'
+                        if ($('#filterUser option[value="' + currentUser + '"]').length > 0) {
+                            $('#filterUser').val(currentUser);
+                        } else {
+                            $('#filterUser').val(''); // Revert to default if not found
+                        }
+
+                        // Update the DataTable filters
+                        api.column(1).search($('#filterCategory').val()).draw(); // Adjust column index if necessary
+                        api.column(3).search($('#filterTime').val()).draw();      // Adjust column index if necessary
+                        api.column(2).search($('#filterUser').val()).draw();
                     }
                 });
             },
@@ -434,9 +484,11 @@ check(['0']);
                     $('#changeQuestionModal').modal('hide');
                     toastr.success('Question updated successfully!');
                     $('#questionsTable').DataTable().clear().destroy();
-                    fetchQuestions();
                     loadCategories();
+                    loadUsers();
+                    loadTime();
                     clearChangeModal();
+                    fetchQuestions();
                 } else {
                     toastr.error(data.message || 'Error updating question.');
                 }
@@ -467,27 +519,18 @@ check(['0']);
                     success: function (data) {
                         if (data.success) {
                             $('#questionsTable').DataTable().clear().destroy();
+                            loadCategories();
+                            loadUsers();
+                            loadTime();
                             fetchQuestions();
                             $('#filterType').val('');
-                            Swal.fire(
-                                'Deleted!',
-                                'Your question has been deleted.',
-                                'success'
-                            );
+                            toastr.success('Question deleted successfully!');
                         } else {
-                            Swal.fire(
-                                'Failed!',
-                                data.message || 'Error deleting the question. Please try again.',
-                                'error'
-                            );
+                            toastr.error(data.message || 'Error deleting question.');
                         }
                     },
                     error: function () {
-                        Swal.fire(
-                            'Failed!',
-                            'Failed to connect to server. Please check your connection.',
-                            'error'
-                        );
+                        toastr.error('Failed to delete question.');
                     }
                 });
             }
@@ -566,6 +609,7 @@ check(['0']);
     $(document).ready(function () {
         loadCategories();
         loadUsers();
+        loadTime();
         $('#addQuestionModal').on('hidden.bs.modal', function () {
             clearAddModal();
         });
@@ -605,8 +649,11 @@ check(['0']);
                         toastr.success('Question added successfully!');
                         $('#addQuestionModal').modal('hide');
                         $('#questionsTable').DataTable().clear().destroy();
-                        fetchQuestions();
                         clearAddModal();
+                        loadCategories();
+                        loadUsers();
+                        loadTime();
+                        fetchQuestions();
                     } else {
                         toastr.error(data.message || 'Error adding question. Please try again.');
                     }

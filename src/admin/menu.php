@@ -51,6 +51,9 @@ check(['0']);
                     <a class="nav-link" href="menu.php">Menu</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="users.php">Users</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="questions.php">Questions</a>
                 </li>
                 <li class="nav-item">

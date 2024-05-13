@@ -247,14 +247,16 @@ check(['1']);
     }
 
     function fetchQuestions() {
+        let currentCategory = $('#filterCategory').val();
+        let currentType = $('#filterType').val();
         $.ajax({
             url: './questions/fetchQuestions.php',
             type: 'GET',
             dataType: 'json',
             success: function (data) {
                 $('#questionsTable').DataTable({
+                    data: data.data,
                     responsive: true,
-                    ajax: './questions/fetchQuestions.php',
                     columns: [
                         {data: 'question', title: 'Question'},
                         {data: 'category', title: 'Category'},
@@ -296,7 +298,7 @@ check(['1']);
                         $('td', row).css('text-align', 'center');
                     },
                     initComplete: function () {
-                        var api = this.api();
+                        let api = this.api();
 
                         $('#filterCategory').on('change', function () {
                             api.column(1).search(this.value).draw();
@@ -305,6 +307,11 @@ check(['1']);
                         $('#filterType').on('change', function () {
                             api.column(2).search(this.value).draw();
                         });
+
+                        $('#filterCategory').val(currentCategory);
+                        $('#filterType').val(currentType);
+                        api.column(1).search(currentCategory).draw();
+                        api.column(2).search(currentType).draw();
                     }
                 });
             },
@@ -430,26 +437,14 @@ check(['1']);
                         if (data.success) {
                             $('#questionsTable').DataTable().clear().destroy();
                             fetchQuestions();
-                            $('#filterType').val('');
-                            Swal.fire(
-                                'Deleted!',
-                                'Your question has been deleted.',
-                                'success'
-                            );
+                            loadCategories();
+                            toastr.success('Question deleted successfully!');
                         } else {
-                            Swal.fire(
-                                'Failed!',
-                                data.message || 'Error deleting the question. Please try again.',
-                                'error'
-                            );
+                            toastr.error(data.message || 'Error deleting question. Please try again.');
                         }
                     },
                     error: function () {
-                        Swal.fire(
-                            'Failed!',
-                            'Failed to connect to server. Please check your connection.',
-                            'error'
-                        );
+                        toastr.error('Failed to delete question. Please try again.');
                     }
                 });
             }
@@ -566,8 +561,9 @@ check(['1']);
                         toastr.success('Question added successfully!');
                         $('#addQuestionModal').modal('hide');
                         $('#questionsTable').DataTable().clear().destroy();
-                        fetchQuestions();
                         clearAddModal();
+                        fetchQuestions();
+                        loadCategories();
                     } else {
                         toastr.error(data.message || 'Error adding question. Please try again.');
                     }

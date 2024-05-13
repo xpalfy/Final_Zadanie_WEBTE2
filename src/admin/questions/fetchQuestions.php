@@ -15,12 +15,12 @@ if (!$conn) {
 }
 
 $sql_1 = "
-    SELECT q.*, u.username 
+    SELECT q.id, q.question, q.category, q.active, q.qr_code, DATE(q.created_at) AS time, u.username 
     FROM questions q 
     JOIN users u ON q.creator = u.id
 ";
 $sql_2 = "
-    SELECT q.*, u.username 
+    SELECT q.id, q.question, q.category, q.active, q.qr_code, DATE(q.created_at) AS time, u.username 
     FROM abc_questions q 
     JOIN users u ON q.creator = u.id
 ";
@@ -35,6 +35,7 @@ if ($result_1 && $result_2) {
             'question' => $row['question'],
             'category' => $row['category'],
             'creator' => $row['username'],
+            'time' => $row['time'],
             'type' => 'One Answer',
             'active' => $row['active'] ? 'true' : 'false',
             'qr_code' => $row['qr_code']
@@ -46,6 +47,7 @@ if ($result_1 && $result_2) {
             'question' => $row['question'],
             'category' => $row['category'],
             'creator' => $row['username'],
+            'time' => $row['time'],
             'type' => 'Multiple Choice',
             'active' => $row['active']? 'true' : 'false',
             'qr_code' => $row['qr_code']
