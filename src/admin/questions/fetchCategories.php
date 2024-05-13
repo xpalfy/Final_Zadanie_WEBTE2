@@ -8,8 +8,8 @@ require '../../config.php';
 check(['0']);
 $conn = getDatabaseConnection();
 
-$result_1 = $conn->query("SELECT DISTINCT category FROM questions ORDER BY category ASC");
-$result_2 = $conn->query("SELECT DISTINCT category FROM abc_questions ORDER BY category ASC");
+$result_1 = $conn->query("SELECT DISTINCT category FROM questions ORDER BY category ");
+$result_2 = $conn->query("SELECT DISTINCT category FROM abc_questions ORDER BY category ");
 $categories = [];
 while ($row = $result_1->fetch_assoc()) {
     $categories[] = $row['category'];

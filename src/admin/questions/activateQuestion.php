@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $row = $result->fetch_assoc();
                 $currentStatus = $row['active'];
                 $newStatus = $currentStatus ? 0 : 1;
-
+                $updateQuery = '';
                 if ($data['type'] === 'One Answer') {
                     $updateQuery = "UPDATE questions SET active = ? WHERE id = ?";
                 } elseif ($data['type'] === 'Multiple Choice') {
