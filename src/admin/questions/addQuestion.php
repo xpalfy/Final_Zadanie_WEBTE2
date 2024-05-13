@@ -12,6 +12,20 @@ $active = 0;
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents("php://input"), true);
 
+    $creator = $data['questionCreator'];
+    $stmt = $conn->prepare("SELECT id FROM users WHERE username = ?");
+    $stmt->bind_param("s", $creator);
+    $stmt->execute();
+    $stmt->store_result();
+    if ($stmt->num_rows === 0) {
+        echo json_encode(['success' => false, 'message' => 'Invalid creator']);
+        exit;
+    }
+    $stmt->bind_result($creator);
+    $stmt->fetch();
+    $stmt->close();
+
+
     if (!isset($data['questionText'], $data['questionCategory'], $data['questionType'])) {
         echo json_encode(['success' => false, 'message' => 'Invalid data provided']);
         exit;
@@ -19,13 +33,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     try {
         $conn->begin_transaction();
-        while(true){
+        while (true) {
             $qr_code = substr(str_shuffle(str_repeat('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789', 5)), 0, 5);
             $stmt = $conn->prepare("SELECT qr_code FROM questions WHERE qr_code = ?");
             $stmt->bind_param("s", $qr_code);
             $stmt->execute();
             $stmt->store_result();
-            if($stmt->num_rows === 0){
+            if ($stmt->num_rows === 0) {
                 break;
             }
         }
@@ -42,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $data['optionC'],
                 $data['questionCategory'],
                 $active,
-                $_SESSION["user"]["id"],
+                $creator,
                 $qr_code
             );
         } else {
@@ -55,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $data['questionText'],
                 $data['questionCategory'],
                 $active,
-                $_SESSION["user"]["id"],
+                $creator,
                 $qr_code
             );
         }

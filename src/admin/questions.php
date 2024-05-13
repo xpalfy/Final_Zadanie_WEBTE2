@@ -134,6 +134,12 @@ check(['0']);
                         </select>
                     </div>
                     <div class="form-group">
+                        <label for="questionCreator">Select creator:</label>
+                        <select class="form-control" id="questionCreator" name="questionCreator" required>
+                            <option value="<?php echo $_SESSION['user']['id']; ?>">Current user</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label for="questionText">Question Text</label>
                         <textarea class="form-control" id="questionText" name="questionText" required
                                   oninput="isValidQuestion(this)"></textarea>
@@ -285,6 +291,27 @@ check(['0']);
                     $('#filterUser').empty().append('<option value="">All Users</option>');
                     data.users.forEach(function (user) {
                         $('#filterUser').append($('<option>').text(user).val(user));
+                    });
+                } else {
+                    toastr.error(data.message || 'Error loading users.');
+                }
+            },
+            error: function () {
+                toastr.error('Failed to load users.');
+            }
+        });
+    }
+
+    function loadUsersIntoModal() {
+        $.ajax({
+            url: './questions/fetchUserModal.php',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                if (data.success) {
+                    $('#questionCreator').empty();
+                    data.users.forEach(function (user) {
+                        $('#questionCreator').append($('<option>').text(user).val(user));
                     });
                 } else {
                     toastr.error(data.message || 'Error loading users.');
@@ -610,6 +637,7 @@ check(['0']);
         loadCategories();
         loadUsers();
         loadTime();
+        loadUsersIntoModal();
         $('#addQuestionModal').on('hidden.bs.modal', function () {
             clearAddModal();
         });

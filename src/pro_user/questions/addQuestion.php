@@ -25,7 +25,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->bind_param("s", $qr_code);
             $stmt->execute();
             $stmt->store_result();
-            if($stmt->num_rows === 0){
+            $stmt_abc = $conn->prepare("SELECT qr_code FROM abc_questions WHERE qr_code = ?");
+            $stmt_abc->bind_param("s", $qr_code);
+            $stmt_abc->execute();
+            $stmt_abc->store_result();
+            if ($stmt->num_rows === 0 && $stmt_abc->num_rows === 0) {
                 break;
             }
         }
