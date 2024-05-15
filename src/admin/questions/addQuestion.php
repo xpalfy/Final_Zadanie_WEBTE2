@@ -44,16 +44,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
         if ($data['questionType'] == '2' && isset($data['optionA'], $data['optionB'], $data['optionC'])) {
-            $sql = "INSERT INTO abc_questions (question, a, b, c, category, active, creator, qr_code) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO abc_questions (question, a, b, c, answer, category, active, creator, qr_code) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             $stmt = $conn->prepare($sql);
             if ($stmt === false) {
                 throw new Exception($conn->error);
             }
-            $stmt->bind_param("sssssiss",
+            $stmt->bind_param("ssssssiss",
                 $data['questionText'],
                 $data['optionA'],
                 $data['optionB'],
                 $data['optionC'],
+                $data['answer'],
                 $data['questionCategory'],
                 $active,
                 $creator,

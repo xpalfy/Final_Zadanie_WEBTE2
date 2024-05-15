@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $questionId = $data['id'];
 
     if (isset($data['type']) && $data['type'] === 'Multiple Choice') {
-        $stmt = $conn->prepare("SELECT id, question, category, a, b, c FROM abc_questions WHERE id = ?");
+        $stmt = $conn->prepare("SELECT id, question, category, a, b, c, answer FROM abc_questions WHERE id = ?");
     } else {
         $stmt = $conn->prepare("SELECT id, question, category FROM questions WHERE id = ?");
     }
