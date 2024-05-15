@@ -162,7 +162,10 @@ function directBackToIndex()
           $(this).serializeArray().forEach(function (item) {
               formData[item.name] = item.value;
           });
-            formData['answer'] = '';
+            if(!formData['answer']){
+                formData['answer'] = '';
+            }
+
             if(formData.optionASwitch){
                 formData['answer'] += 'A';
                 delete formData.optionASwitch;
