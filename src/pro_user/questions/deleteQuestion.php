@@ -26,7 +26,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->bind_param('i', $questionId);
             $stmt->execute();
             if ($stmt->affected_rows === 1) {
-                echo json_encode(['success' => true]);
+                if($data['type'] === 'One Answer') {
+                    $stmt = $conn->prepare("DELETE FROM answers WHERE question_id = ?");
+                    $stmt->bind_param('i', $questionId);
+                    $stmt->execute();
+                } elseif ($data['type'] === 'Multiple Choice') {
+                    $stmt = $conn->prepare("DELETE FROM abc_answers WHERE question_id = ?");
+                    $stmt->bind_param('i', $questionId);
+                    $stmt->execute();
+                }
+                echo json_encode(['success' => true, 'message' => 'Question deleted successfully.']);
             } else {
                 echo json_encode(['success' => false, 'message' => 'No changes made to the question status.']);
             }

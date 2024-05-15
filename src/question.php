@@ -76,9 +76,9 @@ function directBackToIndex()
     checkToasts();
 </script>
 <div class="container cont justify-content-center align-items-center">
-    <div class="col-sm-10 col-md-10 col-lg-8">
-        <div class="card bg-dark">
-            <div class="card-body">
+    <div>
+        <div class="card bg-dark" style="width: fit-content">
+            <div class="card-body" style="display: flex; flex-direction: column; align-items: center; width: fit-content">
                 <h1 class="text-center mb-4" id="Question_text"></h1>
                 <form action="" method="post" id="answerForm">
                     <div class="form-group" id="Answers"></div>
@@ -119,8 +119,8 @@ function directBackToIndex()
                 <input type="hidden" name="type" value="abc_answer">
                 <input type="hidden" name="qr_code" value="${question.qr_code}">
                 <input type="hidden" name="correct_answer" value="${correctAnswer}">
-                <div class="row">
-                    <div class="col-10">
+                <div class="row" style="align-items: center; flex-wrap: nowrap">
+                    <div class="col">
                         <h5>A: ${question.a}</h5>
                     </div>
                     <div class="col-1" style=" align-items: center;">
@@ -130,8 +130,8 @@ function directBackToIndex()
                         </label>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-10">
+                <div class="row" style="align-items: center; flex-wrap: nowrap">
+                    <div class="col">
                         <h5>B: ${question.b}</h5>
                     </div>
                     <div class="col-1" style=" align-items: center;">
@@ -141,8 +141,8 @@ function directBackToIndex()
                         </label>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-10">
+                <div class="row" style="align-items: center; flex-wrap: nowrap;">
+                    <div class="col">
                         <h5>C: ${question.c}</h5>
                     </div>
                     <div class="col-1" style=" align-items: center;">
