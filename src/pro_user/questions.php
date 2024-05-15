@@ -358,7 +358,7 @@ check(['1']);
                             data: 'id',
                             title: 'Activate',
                             render: function (data, type, row) {
-                                return `<button onclick="activateQuestion('${row.id}','${row.type}')" class="btn btn-${row.active === 'true' ? 'secondary' : 'success'} btn-sm" style="min-width: 80%;">${row.active === 'true' ? 'Deactivate' : 'Activate'}</button>`;
+                                return `<button onclick="activateQuestion('${row.id}','${row.type}')" class="btn btn-${row.active === 'true' ? 'success' : 'secondary'} btn-sm" style="min-width: 80%;">${row.active === 'true' ? 'Active' : 'Inactive'}</button>`;
                             },
                             orderable: false
                         },

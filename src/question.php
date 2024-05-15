@@ -187,6 +187,9 @@ function directBackToIndex()
               success: function (data) {
                   if (data.success) {
                       toastr.success('Answer added successfully!');
+                        setTimeout(function () {
+                            window.location.href = 'answer.php/?key=' + '<?php echo $question['qr_code']; ?>';
+                        }, 1000);
                   } else {
                       toastr.error(data.message || 'Error adding answer. Please try again.');
                   }
