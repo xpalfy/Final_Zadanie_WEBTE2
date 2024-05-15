@@ -33,7 +33,7 @@ CREATE TABLE `abc_questions` (
   `a` varchar(510) COLLATE utf8mb4_unicode_ci NOT NULL,
   `b` varchar(510) COLLATE utf8mb4_unicode_ci NOT NULL,
   `c` varchar(510) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `answer` varchar(1) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `answer` varchar(3) COLLATE utf8mb4_unicode_ci NOT NULL,
   `category` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `active` varchar(1) COLLATE utf8mb4_unicode_ci NOT NULL,
   `creator` int NOT NULL,

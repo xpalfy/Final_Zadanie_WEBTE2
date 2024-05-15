@@ -19,6 +19,7 @@ check(['1']);
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
     <link href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../styles/questions.css">
+    <link rel="stylesheet" href="../css/customSwitch.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -136,18 +137,45 @@ check(['1']);
                     <div id="multipleChoiceOptions" style="display:none;">
                         <div class="form-group">
                             <label for="optionA">Option A:</label>
-                            <input type="text" class="form-control" id="optionA" name="optionA"
-                                   oninput="isValidText(this)">
+                            <div class="row">
+                                <div class="col-9">
+                                    <input type="text" class="form-control" id="optionA" name="optionA" oninput="isValidText(this)">
+                                </div>
+                                <div class="col-1" style=" align-items: center;">
+                                    <label class="switch">
+                                        <input type="checkbox" id="optionASwitch" name="optionASwitch" value="true">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="optionB">Option B:</label>
-                            <input type="text" class="form-control" id="optionB" name="optionB"
-                                   oninput="isValidText(this)">
+                            <div class="row">
+                                <div class="col-9">
+                                    <input type="text" class="form-control" id="optionB" name="optionB" oninput="isValidText(this)">
+                                </div>
+                                <div class="col-1" style=" align-items: center;">
+                                    <label class="switch">
+                                        <input type="checkbox" id="optionBSwitch" name="optionBSwitch" value="true">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="optionC">Option C:</label>
-                            <input type="text" class="form-control" id="optionC" name="optionC"
-                                   oninput="isValidText(this)">
+                            <div class="row">
+                                <div class="col-9">
+                                    <input type="text" class="form-control" id="optionC" name="optionC" oninput="isValidText(this)">
+                                </div>
+                                <div class="col-1" style=" align-items: center;">
+                                    <label class="switch">
+                                        <input type="checkbox" id="optionCSwitch" name="optionCSwitch" value="true">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -192,18 +220,48 @@ check(['1']);
                     <div id="changeMultipleChoiceOptions" style="display:none;">
                         <div class="form-group">
                             <label for="changeOptionA">Option A:</label>
-                            <input type="text" class="form-control" id="changeOptionA" name="optionA"
-                                   oninput="isValidInput(this)">
+                            <div class="row">
+                                <div class="col-9">
+                                    <input type="text" class="form-control" id="changeOptionA" name="optionA"
+                                           oninput="isValidInput(this)">
+                                </div>
+                                <div class="col-1" style=" align-items: center;">
+                                    <label class="switch">
+                                        <input type="checkbox" id="changeOptionASwitch" name="optionASwitch" value="true">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="changeOptionB">Option B:</label>
-                            <input type="text" class="form-control" id="changeOptionB" name="optionB"
-                                   oninput="isValidInput(this)">
+                            <div class="row">
+                                <div class="col-9">
+                                    <input type="text" class="form-control" id="changeOptionB" name="optionB"
+                                           oninput="isValidInput(this)">
+                                </div>
+                                <div class="col-1" style=" align-items: center;">
+                                    <label class="switch">
+                                        <input type="checkbox" id="changeOptionBSwitch" name="optionBSwitch" value="true">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="changeOptionC">Option C:</label>
-                            <input type="text" class="form-control" id="changeOptionC" name="optionC"
-                                   oninput="isValidInput(this)">
+                            <div class="row">
+                                <div class="col-9">
+                                    <input type="text" class="form-control" id="changeOptionC" name="optionC"
+                                           oninput="isValidInput(this)">
+                                </div>
+                                <div class="col-1" style=" align-items: center;">
+                                    <label class="switch">
+                                        <input type="checkbox" id="changeOptionCSwitch" name="optionCSwitch" value="true">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -365,6 +423,24 @@ check(['1']);
         });
     }
 
+    function checkAnswers(answer) {
+        if (answer.includes('A')) {
+            $('#changeOptionASwitch').prop('checked', true);
+        } else {
+            $('#changeOptionASwitch').prop('checked', false);
+        }
+        if (answer.includes('B')) {
+            $('#changeOptionBSwitch').prop('checked', true);
+        } else {
+            $('#changeOptionBSwitch').prop('checked', false);
+        }
+        if (answer.includes('C')) {
+            $('#changeOptionCSwitch').prop('checked', true);
+        } else {
+            $('#changeOptionCSwitch').prop('checked', false);
+        }
+    }
+
     function changeQuestion(id, type) {
         $.ajax({
             url: './questions/fetchQuestionDetails.php',
@@ -377,7 +453,6 @@ check(['1']);
                     $('#changeQuestionId').val(data.question.id);
                     $('#changeQuestionText').val(data.question.question);
                     $('#changeQuestionCategory').val(data.question.category);
-
                     if (type === 'Multiple Choice') {
                         $('#changeQuestionType').empty().append($('<option>', {
                             value: '2',
@@ -387,6 +462,7 @@ check(['1']);
                         $('#changeOptionA').val(data.question.options.a);
                         $('#changeOptionB').val(data.question.options.b);
                         $('#changeOptionC').val(data.question.options.c);
+                        checkAnswers(data.question.answer);
                     } else {
                         $('#changeQuestionType').empty()
                             .append($('<option>', {value: '1', text: 'One answer'}))
@@ -421,6 +497,23 @@ check(['1']);
             delete formData.optionA;
             delete formData.optionB;
             delete formData.optionC;
+            delete formData.optionASwitch;
+            delete formData.optionBSwitch;
+            delete formData.optionCSwitch;
+        }else{
+            formData['answer'] = '';
+            if(formData.optionASwitch){
+                formData['answer'] += 'A';
+                delete formData.optionASwitch;
+            }
+            if(formData.optionBSwitch){
+                formData['answer'] += 'B';
+                delete formData.optionBSwitch;
+            }
+            if(formData.optionCSwitch){
+                formData['answer'] += 'C';
+                delete formData.optionCSwitch;
+            }
         }
         $.ajax({
             type: 'POST',
@@ -529,6 +622,7 @@ check(['1']);
         $('#optionA').val('');
         $('#optionB').val('');
         $('#optionC').val('');
+        $('#optionASwitch, #optionBSwitch, #optionCSwitch').prop('checked', false);
         $('#multipleChoiceOptions').hide();
     }
     function clearChangeModal() {
@@ -550,6 +644,7 @@ check(['1']);
         $('#changeOptionA').val('');
         $('#changeOptionB').val('');
         $('#changeOptionC').val('');
+        $('#changeOptionASwitch, #changeOptionBSwitch, #changeOptionCSwitch').prop('checked', false);
         $('#changeMultipleChoiceOptions').hide();
     }
 
@@ -582,6 +677,24 @@ check(['1']);
                 delete formData.optionA;
                 delete formData.optionB;
                 delete formData.optionC;
+                delete formData.optionASwitch;
+                delete formData.optionBSwitch;
+                delete formData.optionCSwitch;
+            }
+            else{
+                formData['answer'] = '';
+                if(formData.optionASwitch){
+                    formData['answer'] += 'A';
+                    delete formData.optionASwitch;
+                }
+                if(formData.optionBSwitch){
+                    formData['answer'] += 'B';
+                    delete formData.optionBSwitch;
+                }
+                if(formData.optionCSwitch){
+                    formData['answer'] += 'C';
+                    delete formData.optionCSwitch;
+                }
             }
 
             $.ajax({

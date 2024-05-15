@@ -13,13 +13,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents("php://input"), true);
     $id = $data['questionId'];
     if ($data['questionType'] == '2' && isset($data['optionA'], $data['optionB'], $data['optionC'])) {
-        $sql = "UPDATE abc_questions SET question = ?, a = ?, b = ?, c = ?, category = ? WHERE id = ?";
+        $sql = "UPDATE abc_questions SET question = ?, a = ?, b = ?, c = ?, answer = ?, category = ? WHERE id = ?";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("sssssi",
+        $stmt->bind_param("ssssssi",
             $data['questionText'],
             $data['optionA'],
             $data['optionB'],
             $data['optionC'],
+            $data['answer'],
             $data['questionCategory'],
             $data['questionId']
         );

@@ -147,6 +147,13 @@ function checkFormAdd() {
         if (!isValidText(c)) {
             formIsValid = false;
         }
+        let aSwitch = document.getElementById('optionASwitch');
+        let bSwitch = document.getElementById('optionBSwitch');
+        let cSwitch = document.getElementById('optionCSwitch');
+        if (!aSwitch.checked && !bSwitch.checked && !cSwitch.checked) {
+            toastr.error('Please select the correct answer.');
+            return false;
+        }
     }
 
     if (!formIsValid) {
@@ -179,6 +186,13 @@ function checkFormChange() {
         }
         if (!isValidText(c)) {
             formIsValid = false;
+        }
+        let aSwitch = document.getElementById('changeOptionASwitch');
+        let bSwitch = document.getElementById('changeOptionBSwitch');
+        let cSwitch = document.getElementById('changeOptionCSwitch');
+        if (!aSwitch.checked && !bSwitch.checked && !cSwitch.checked) {
+            toastr.error('Please select the correct answer.');
+            return false;
         }
     }
 
