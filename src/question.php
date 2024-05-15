@@ -1,4 +1,5 @@
 <?php
+
 require_once 'config.php';
 $conn = getDatabaseConnection();
 // get number from url
@@ -55,6 +56,7 @@ function directBackToIndex()
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
     <link rel="stylesheet" href="styles/base.css">
     <link rel="stylesheet" href="styles/index.css">
+    <link rel="stylesheet" href="css/customSwitch.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -78,10 +80,8 @@ function directBackToIndex()
         <div class="card bg-dark">
             <div class="card-body">
                 <h1 class="text-center mb-4" id="Question_text"></h1>
-                <form action="" method="post">
-                    <div class="form-group" id="Answers">
-
-                    </div>
+                <form action="" method="post" id="answerForm">
+                    <div class="form-group" id="Answers"></div>
                     <button type="submit" class="btn btn-primary btn-block">Submit</button>
                 </form>
             </div>
@@ -96,14 +96,108 @@ function directBackToIndex()
     </div>
 </footer>
 <script>
-    let form = document.querySelector('form');
-    form.addEventListener('submit', checkForm);
+    $(document).ready(function () {
+        let question = <?php echo json_encode($question); ?>;
+        let type = '<?php echo $type; ?>';
+        $('#Question_text').text(question.question);
+        switch (type) {
+            case 'one_answer':
+                $('#Answers').append(`
+                <div class="form-group">
+                    <input type="hidden" name="question_id" value="${question.id}">
+                    <input type="hidden" name="type" value="one_answer">
+                    <input type="hidden" name="qr_code" value="${question.qr_code}">
+                    <input type="text" class="form-control" name="answer" placeholder="Answer" required>
+                </div>
+            `);
+                break;
+            case 'abc_answer':
+                let correctAnswer = question.answer;
+                $('#Answers').append(`
+                <div class="form-group">
+                <input type="hidden" name="question_id" value="${question.id}">
+                <input type="hidden" name="type" value="abc_answer">
+                <input type="hidden" name="qr_code" value="${question.qr_code}">
+                <input type="hidden" name="correct_answer" value="${correctAnswer}">
+                <div class="row">
+                    <div class="col-10">
+                        <h5>A: ${question.a}</h5>
+                    </div>
+                    <div class="col-1" style=" align-items: center;">
+                        <label class="switch">
+                            <input type="checkbox" id="OptionASwitch" name="optionASwitch" value="true">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-10">
+                        <h5>B: ${question.b}</h5>
+                    </div>
+                    <div class="col-1" style=" align-items: center;">
+                        <label class="switch">
+                            <input type="checkbox" id="ptionBSwitch" name="optionBSwitch" value="true">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-10">
+                        <h5>C: ${question.c}</h5>
+                    </div>
+                    <div class="col-1" style=" align-items: center;">
+                        <label class="switch">
+                            <input type="checkbox" id="OptionASwitch" name="optionCSwitch" value="true">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+            `);
+                break;
+        }
+
+        $('#answerForm').on('submit', function (e) {
+          e.preventDefault();
+          let formData = {};
+          $(this).serializeArray().forEach(function (item) {
+              formData[item.name] = item.value;
+          });
+            formData['answer'] = '';
+            if(formData.optionASwitch){
+                formData['answer'] += 'A';
+                delete formData.optionASwitch;
+            }
+            if(formData.optionBSwitch){
+                formData['answer'] += 'B';
+                delete formData.optionBSwitch;
+            }
+            if(formData.optionCSwitch){
+                formData['answer'] += 'C';
+                delete formData.optionCSwitch;
+            }
+          $.ajax({
+              type: 'POST',
+              url: 'addAnswer.php',
+              contentType: 'application/json',
+              data: JSON.stringify(formData),
+              dataType: 'json',
+              success: function (data) {
+                  if (data.success) {
+                      toastr.success('Answer added successfully!');
+                  } else {
+                      toastr.error(data.message || 'Error adding answer. Please try again.');
+                  }
+              },
+              error: function () {
+                  toastr.error('Failed to connect to server. Please check your connection.');
+              }
+          });
+    });
+});
+
 </script>
 </body>
 </html>
 
-<?php
-// make question text
-echo "<script>document.getElementById('Question_text').innerText = '" . $question['question'] . "';</script>";
 
 

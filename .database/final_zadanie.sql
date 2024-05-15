@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: mysql
--- Generation Time: May 13, 2024 at 01:19 PM
+-- Generation Time: May 15, 2024 at 02:54 PM
 -- Server version: 8.0.32
 -- PHP Version: 8.2.8
 
@@ -24,22 +24,47 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `abc_answers`
+--
+
+CREATE TABLE `abc_answers` (
+  `id` int NOT NULL,
+  `question_id` int NOT NULL,
+  `answer` varchar(3) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `abc_questions`
 --
 
 CREATE TABLE `abc_questions` (
   `id` int NOT NULL,
-  `question` varchar(510) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `a` varchar(510) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `b` varchar(510) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `c` varchar(510) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `answer` varchar(3) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `question` varchar(510) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `a` varchar(510) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `b` varchar(510) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `c` varchar(510) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `answer` varchar(3) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `category` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `active` varchar(1) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `active` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `creator` int NOT NULL,
-  `qr_code` varchar(5) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `qr_code` varchar(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `answers`
+--
+
+CREATE TABLE `answers` (
+  `id` int NOT NULL,
+  `question_id` int NOT NULL,
+  `answer` varchar(510) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -49,11 +74,11 @@ CREATE TABLE `abc_questions` (
 
 CREATE TABLE `questions` (
   `id` int NOT NULL,
-  `question` varchar(510) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `question` varchar(510) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `category` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `active` varchar(1) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `active` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `creator` int NOT NULL,
-  `qr_code` varchar(5) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `qr_code` varchar(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -65,8 +90,8 @@ CREATE TABLE `questions` (
 
 CREATE TABLE `users` (
   `id` int NOT NULL,
-  `username` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `type` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -82,6 +107,12 @@ INSERT INTO `users` (`id`, `username`, `password`, `type`) VALUES
 --
 
 --
+-- Indexes for table `abc_answers`
+--
+ALTER TABLE `abc_answers`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `abc_questions`
 --
 ALTER TABLE `abc_questions`
@@ -89,6 +120,12 @@ ALTER TABLE `abc_questions`
   ADD UNIQUE KEY `question` (`question`),
   ADD UNIQUE KEY `qr_code` (`qr_code`),
   ADD KEY `fk_users_abc_questions` (`creator`);
+
+--
+-- Indexes for table `answers`
+--
+ALTER TABLE `answers`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `questions`
@@ -111,9 +148,21 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT for table `abc_answers`
+--
+ALTER TABLE `abc_answers`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
+
+--
 -- AUTO_INCREMENT for table `abc_questions`
 --
 ALTER TABLE `abc_questions`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
+
+--
+-- AUTO_INCREMENT for table `answers`
+--
+ALTER TABLE `answers`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=0;
 
 --
