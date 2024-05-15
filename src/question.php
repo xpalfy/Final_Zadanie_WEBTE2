@@ -82,7 +82,7 @@ function directBackToIndex()
                 <h1 class="text-center mb-4" id="Question_text"></h1>
                 <form action="" method="post" id="answerForm">
                     <div class="form-group" id="Answers"></div>
-                    <button type="submit" class="btn btn-primary btn-block">Submit</button>
+                    <button type="submit" class="btn btn-primary btn-block" id="submitBtn">Submit</button>
                 </form>
             </div>
         </div>
@@ -187,8 +187,9 @@ function directBackToIndex()
               success: function (data) {
                   if (data.success) {
                       toastr.success('Answer added successfully!');
+                      $('#submitBtn').prop('disabled', true);
                         setTimeout(function () {
-                            window.location.href = 'answer.php/?key=' + '<?php echo $question['qr_code']; ?>';
+                            window.location.href = 'answer.php/?key=<?php echo $question['qr_code']; ?>';
                         }, 1000);
                   } else {
                       toastr.error(data.message || 'Error adding answer. Please try again.');
