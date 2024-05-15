@@ -354,7 +354,7 @@ check(['1']);
     function generateQRCode(qrCode) {
         let fullUrl = `https://node84.webte.fei.stuba.sk:1000/question.php?qr_code=${qrCode}`;
         Swal.fire({
-            title: 'QR Code',
+            title: 'Room Code: ' + qrCode,
             text: 'Scan the QR code to view the question',
             imageUrl: `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${fullUrl}`,
             imageWidth: 150,
