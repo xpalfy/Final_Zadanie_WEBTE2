@@ -139,13 +139,14 @@ function directBackToIndex()
     $(document).ready(function () {
         let question = <?php echo json_encode($question); ?>;
         let type = '<?php echo $type; ?>';
+        console.log(question);
+        console.log(type);
         $('#Question_text').text(question.question);
-
         switch (type) {
             case 'one_answer':
                 $('#answers').append(`<ul class="list-group" id="answersList"></ul>`);
                 // append with the answers in a ul
-                <?php foreach ($answers as $answer):?>
+                <?php if($type == 'one_answer') foreach ($answers as $answer):?>
                 $('#answersList').append(`
                 <li class="list-group-item" style="color:black;">
                     <div>
@@ -158,11 +159,11 @@ function directBackToIndex()
             case 'abc_answer':
                 $('#answers').append(`<div class="span6" id="answersList"></div>`);
                 // append with the answers in a ul
-                <?php foreach ($answers as $answer):?>
+                <?php if($type == 'abc_answer') foreach ($answers as $answer):?>
                 $('#answersList').append(`
                 <strong><?php echo $question[strtolower($answer['answer'])]; ?></strong><span style="float:right;"><?php echo $answer['count']; ?></span>
                 <div class="progress active" style="height:2rem;">
-                    <div class="progress-bar" role="progressbar" style="<?php if($answer['answer'] == $question['answer']){echo "background-color:#25c525;";} ?>width: <?php echo ($answer['count'] / $vote_count) * 100; ?>%" aria-valuenow="<?php echo $answer['count']; ?>" aria-valuemin="0" aria-valuemax="1"></div>
+                    <div class="progress-bar" role="progressbar" style="<?php if(str_contains($question['answer'],$answer['answer'])){echo "background-color:#25c525;";} ?>width: <?php echo ($answer['count'] / $vote_count) * 100; ?>%" aria-valuenow="<?php echo $answer['count']; ?>" aria-valuemin="0" aria-valuemax="1"></div>
                 </div>
                 <br>
                 `);
