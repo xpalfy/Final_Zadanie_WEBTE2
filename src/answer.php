@@ -38,7 +38,9 @@ switch ($type) {
         $sql = "SELECT * FROM answers WHERE question_id = " . $question['id'];
         $result = $conn->query($sql);
         $answers = [];
+        $vote_count = 0;
         while ($row = $result->fetch_assoc()) {
+            $vote_count += $row['count'];
             $answers[] = $row;
         }
         break;
@@ -89,6 +91,17 @@ function directBackToIndex()
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script src="../js/regex.js"></script>
 </head>
+<style>
+    .answer{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #696969;
+        color: white;
+        border-radius: 10px;
+        margin: 5px;
+    }
+</style>
 <body>
 <script>
     function checkToasts() {
@@ -136,6 +149,52 @@ function directBackToIndex()
     </div>
 </footer>
 <script>
+
+    function organizeAnswersRandomPlaces() {
+        let parent = document.getElementById('answersList');
+        for (let i = parent.children.length; i >= 0; i--) {
+            parent.appendChild(parent.children[Math.random() * i | 0]);
+        }
+        let answers = document.getElementsByClassName('answer');
+        let answerCount = answers.length;
+        // set random grid rows and cols for parent
+        parent.style.display = 'grid';
+        let i = 0
+        while (i < answerCount) {
+            let good = true;
+            let row = Math.floor(Math.random() * answerCount) + 1;
+            let col = Math.floor(Math.random() * answerCount) + 1;
+            // check if grid is occupied
+            for (let j = 0; j < i; j++) {
+                if (answers[j].style.gridRowStart == row && answers[j].style.gridColumnStart == col) {
+                    good = false;
+                }
+            }
+            if (good) {
+                answers[i].style.gridRow = row;
+                answers[i].style.gridColumn = col;
+                console.log(answers[i].style.gridRow, answers[i].style.gridColumn);
+                i++;
+            }
+        }
+    }
+
+    function getAnswers(){
+        $.ajax({
+            url: 'getAnswers.php',
+            type: 'GET',
+            data: {
+                question_id: <?php echo $question['id']; ?>
+            },
+            success: function (data) {
+                console.log(data);
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
     $(document).ready(function () {
         let question = <?php echo json_encode($question); ?>;
         let type = '<?php echo $type; ?>';
@@ -144,16 +203,10 @@ function directBackToIndex()
         $('#Question_text').text(question.question);
         switch (type) {
             case 'one_answer':
-                $('#answers').append(`<ul class="list-group" id="answersList"></ul>`);
+                $('#answers').append(`<div class="container" id="answersList"></div>`);
                 // append with the answers in a ul
                 <?php if($type == 'one_answer') foreach ($answers as $answer):?>
-                $('#answersList').append(`
-                <li class="list-group-item" style="color:black;">
-                    <div>
-                        <h1><?php echo $answer['answer']; ?></h1>
-                    </div>
-                </li>
-                `);
+                $('#answersList').append(`<div class="answer"><p style="margin-bottom:0;font-size:<?php echo ($answer['count']*2 / $vote_count) * 100 ?>px"><?php echo $answer['answer']; ?></p></div>`);
                 <?php endforeach; ?>
                 break;
             case 'abc_answer':
@@ -170,6 +223,7 @@ function directBackToIndex()
                 <?php endforeach; ?>
                 break;
         }
+        organizeAnswersRandomPlaces();
     });
 
 

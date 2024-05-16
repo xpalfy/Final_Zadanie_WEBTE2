@@ -57,15 +57,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
         } else {
-            $sql = "INSERT INTO answers (question_id, answer) VALUES (?, ?)";
+            // check if answer is in DB
+            $sql = "SELECT * FROM answers WHERE question_id = ? AND answer = ?";
             $stmt = $conn->prepare($sql);
             if ($stmt === false) {
                 throw new Exception($conn->error);
             }
-            $stmt->bind_param("is",
-                $data['question_id'],
-                $data['answer']
-            );
+            $stmt->bind_param("is", $data['question_id'], $data['answer']);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            if ($result->num_rows > 0) {
+                // answer already exists, increment count
+                $sql = "UPDATE answers SET count = count + 1 WHERE question_id = ? AND answer = ?";
+                $stmt = $conn->prepare($sql);
+                if ($stmt === false) {
+                    throw new Exception($conn->error);
+                }
+                $stmt->bind_param("is", $data['question_id'], $data['answer']);
+            } else {
+                // answer does not exist, insert new answer
+                $sql = "INSERT INTO answers (question_id, answer, count) VALUES (?, ?, 1)";
+                $stmt = $conn->prepare($sql);
+                if ($stmt === false) {
+                    throw new Exception($conn->error);
+                }
+                $stmt->bind_param("is",
+                    $data['question_id'],
+                    $data['answer']
+                );
+            }
             $stmt->execute();
             if ($stmt->affected_rows > 0) {
                 $conn->commit();
