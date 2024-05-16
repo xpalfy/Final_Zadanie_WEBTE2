@@ -162,7 +162,7 @@ function directBackToIndex()
                 $('#answersList').append(`
                 <strong><?php echo $question[strtolower($answer['answer'])]; ?></strong><span style="float:right;"><?php echo $answer['count']; ?></span>
                 <div class="progress active" style="height:2rem;">
-                    <div class="progress-bar" role="progressbar" style="width: <?php echo ($answer['count'] / $vote_count) * 100; ?>%" aria-valuenow="<?php echo $answer['count']; ?>" aria-valuemin="0" aria-valuemax="1"></div>
+                    <div class="progress-bar" role="progressbar" style="<?php if($answer['answer'] == $question['answer']){echo "background-color:#25c525;";} ?>width: <?php echo ($answer['count'] / $vote_count) * 100; ?>%" aria-valuenow="<?php echo $answer['count']; ?>" aria-valuemin="0" aria-valuemax="1"></div>
                 </div>
                 <br>
                 `);
