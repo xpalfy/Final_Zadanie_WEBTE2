@@ -487,7 +487,7 @@ check(['0']);
         } else {
             type = 2;
         }
-        let fullUrl = `https://node84.webte.fei.stuba.sk:1000/question.php?qr_code=${qrCode}&type=${type}`;
+        let fullUrl = `https://node84.webte.fei.stuba.sk:1000/question.php?key=${qrCode}&type=${type}`;
         Swal.fire({
             title: 'Room code: ' + qrCode,
             text: 'Scan the QR code to view the question',

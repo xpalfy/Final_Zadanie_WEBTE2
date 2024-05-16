@@ -194,7 +194,7 @@ function directBackToIndex()
                         $('#answers').append(`<div class="container" id="answersList"></div>`);
                         // append with the answers in a ul
                         for (let i = 0; i < answers.length; i++) {
-                            $('#answersList').append(`<div class="answer"><p style="margin-bottom:0;font-size:${answers[i].count * 2 / vote_count * 100}px">${answers[i].answer}</p></div>`);
+                            $('#answersList').append(`<div class="answer"><p style="margin-bottom:0;font-size:${answers[i].count * 2 / vote_count *5}vw">${answers[i].answer}</p></div>`);
                         }
                         break;
                     case 'abc_answer':
@@ -204,21 +204,15 @@ function directBackToIndex()
                             let correct = false;
                             switch (answers[i].answer) {
                                 case 'A':
-                                    if (question.answer === 'A'){
-                                        correct = true;
-                                    }
+                                    correct = question.answer.includes('A');
                                     answers[i].answer = question.a;
                                     break;
                                 case 'B':
-                                    if (question.answer === 'B'){
-                                        correct = true;
-                                    }
+                                    correct = question.answer.includes('B');
                                     answers[i].answer = question.b;
                                     break;
                                 case 'C':
-                                    if (question.answer === 'C'){
-                                        correct = true;
-                                    }
+                                    correct = question.answer.includes('C');
                                     answers[i].answer = question.c;
                                     break;
                             }

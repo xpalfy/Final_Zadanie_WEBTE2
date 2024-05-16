@@ -410,7 +410,7 @@ check(['1']);
     }
 
     function generateQRCode(qrCode) {
-        let fullUrl = `https://node84.webte.fei.stuba.sk:1000/question.php?qr_code=${qrCode}`;
+        let fullUrl = `https://node84.webte.fei.stuba.sk:1000/question.php?key=${qrCode}`;
         Swal.fire({
             title: 'Room Code: ' + qrCode,
             text: 'Scan the QR code to view the question',
