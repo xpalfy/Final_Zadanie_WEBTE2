@@ -46,7 +46,9 @@ switch ($type) {
         $sql = "SELECT * FROM abc_answers WHERE question_id = " . $question['id'];
         $result = $conn->query($sql);
         $answers = [];
+        $vote_count = 0;
         while ($row = $result->fetch_assoc()) {
+            $vote_count += $row['count'];
             $answers[] = $row;
         }
         break;
@@ -119,8 +121,8 @@ function directBackToIndex()
     </div>
 </nav>
 <div class="container cont justify-content-center align-items-center">
-    <div class="card bg-dark" style="width: fit-content">
-        <div class="card-body" style="display: flex; flex-direction: column; align-items: center; width: fit-content">
+    <div class="card bg-dark" style="width: 100%">
+        <div class="card-body" style="display: flex; flex-direction: column; align-items: center; width: 100%">
             <h1 class="text-center mb-4" id="Question_text"></h1>
             <div class="container" id="answers"></div>
         </div>
@@ -138,23 +140,31 @@ function directBackToIndex()
         let question = <?php echo json_encode($question); ?>;
         let type = '<?php echo $type; ?>';
         $('#Question_text').text(question.question);
-        $('#answers').append(`
-            <ul class="list-group" id="answersList"></ul>
-        `);
+
         switch (type) {
             case 'one_answer':
+                $('#answers').append(`<ul class="list-group" id="answersList"></ul>`);
                 // append with the answers in a ul
                 <?php foreach ($answers as $answer):?>
                 $('#answersList').append(`
-                <li class="list-group-item" style="color:black;"><?php echo $answer['answer']; ?></li>
+                <li class="list-group-item" style="color:black;">
+                    <div>
+                        <h1><?php echo $answer['answer']; ?></h1>
+                    </div>
+                </li>
                 `);
                 <?php endforeach; ?>
                 break;
             case 'abc_answer':
+                $('#answers').append(`<div class="span6" id="answersList"></div>`);
                 // append with the answers in a ul
                 <?php foreach ($answers as $answer):?>
                 $('#answersList').append(`
-                <li class="list-group-item" style="color:black"><?php echo $answer['answer']; ?></li>
+                <strong><?php echo $question[strtolower($answer['answer'])]; ?></strong><span style="float:right;"><?php echo $answer['count']; ?></span>
+                <div class="progress active" style="height:2rem;">
+                    <div class="progress-bar" role="progressbar" style="width: <?php echo ($answer['count'] / $vote_count) * 100; ?>%" aria-valuenow="<?php echo $answer['count']; ?>" aria-valuemin="0" aria-valuemax="1"></div>
+                </div>
+                <br>
                 `);
                 <?php endforeach; ?>
                 break;
