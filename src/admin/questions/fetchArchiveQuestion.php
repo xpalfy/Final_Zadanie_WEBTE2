@@ -28,6 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST'){
             if ($result->num_rows > 0) {
                 $answers = [];
                 while ($row = $result->fetch_assoc()) {
+                    $row['type'] = $data['type'];
                     $answers[] = $row;
                 }
                 echo json_encode(['success' => true, 'questions' => $answers]);

@@ -304,6 +304,9 @@ check(['1']);
                     </tbody>
                 </table>
             </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning" data-dismiss="modal" onclick="downloadAnswers()">Export as .json</button>
+            </div>
         </div>
     </div>
 </div>
@@ -734,9 +737,52 @@ check(['1']);
                 dates.push(question.time);
             }
         });
-        $('#filterDate').empty().append('<option value="">All Dates</option>');
+        $('#filterDate').empty().append('<option value="all">All Dates</option>');
         dates.forEach(function (date) {
             $('#filterDate').append($('<option>').text(date).val(date));
+        });
+    }
+
+    function downloadAnswers(){
+        // get question id
+        let questionId = $('#archiveTable').DataTable().data()[0].question_id;
+        let type = $('#archiveTable').DataTable().data()[0].type;
+        let time = $('#filterDate').val();
+        $.ajax({
+            type: 'POST',
+            url: './questions/downloadAnswers.php',
+            contentType: 'application/json',
+            data: JSON.stringify({id: questionId, type: type, time: time}),
+            dataType: 'json',
+            success: function (data) {
+                if (data.success) {
+                    const modifiedResponse = {
+                        "question": data.question,
+                        "answers": data.answers.map(answer => {
+                            return {
+                                "answer": answer.answer,
+                                "count": answer.count,
+                                "time": answer.time
+                            };
+                        })
+                    };
+                    let json = JSON.stringify(modifiedResponse);
+                    let blob = new Blob([json], {type: 'application/json'});
+                    let url = URL.createObjectURL(blob);
+                    let a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'answers.json';
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                    toastr.success('Answers downloaded successfully!');
+                } else {
+                    toastr.error(data.message || 'Error downloading answers. Please try again.');
+                }
+            },
+            error: function () {
+                toastr.error('Failed to connect to server. Please check your connection.');
+            }
         });
     }
 

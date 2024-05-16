@@ -28,6 +28,7 @@ $data = json_decode(file_get_contents('php://input'), true);
             if ($result->num_rows > 0) {
                 $answers = [];
                 while ($row = $result->fetch_assoc()) {
+                    $row['type'] = $data['type'];
                     $answers[] = $row;
                 }
                 echo json_encode(['success' => true, 'questions' => $answers]);
