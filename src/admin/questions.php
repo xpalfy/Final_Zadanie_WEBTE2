@@ -782,7 +782,11 @@ check(['0']);
                 if (data.success) {
                     $('#archiveQuestionModal').modal('show');
                     $('#filterDate').on('change', function () {
-                        $('#archiveTable').DataTable().column(2).search(this.value).draw();
+                        if ($(this).val() === 'all') {
+                            $('#archiveTable').DataTable().column(2).search('').draw();
+                        } else {
+                            $('#archiveTable').DataTable().column(2).search(this.value).draw();
+                        }
                     });
                     $('#archiveTable').DataTable().clear().destroy();
                     $('#archiveTable').DataTable({
