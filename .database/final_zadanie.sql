@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: mysql
--- Generation Time: May 16, 2024 at 11:36 AM
+-- Generation Time: May 16, 2024 at 05:41 PM
 -- Server version: 8.0.32
 -- PHP Version: 8.2.8
 
@@ -30,8 +30,22 @@ SET time_zone = "+00:00";
 CREATE TABLE `abc_answers` (
   `id` int NOT NULL,
   `question_id` int NOT NULL,
-  `answer` varchar(3) NOT NULL,
+  `answer` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `count` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `abc_answers_archive`
+--
+
+CREATE TABLE `abc_answers_archive` (
+  `id` int NOT NULL,
+  `question_id` int NOT NULL,
+  `answer` varchar(1) NOT NULL,
+  `count` int NOT NULL,
+  `time` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -65,6 +79,20 @@ CREATE TABLE `answers` (
   `question_id` int NOT NULL,
   `answer` varchar(510) NOT NULL,
   `count` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `answers_archive`
+--
+
+CREATE TABLE `answers_archive` (
+  `id` int NOT NULL,
+  `question_id` int NOT NULL,
+  `answer` varchar(510) NOT NULL,
+  `count` int NOT NULL,
+  `time` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -114,6 +142,12 @@ ALTER TABLE `abc_answers`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `abc_answers_archive`
+--
+ALTER TABLE `abc_answers_archive`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `abc_questions`
 --
 ALTER TABLE `abc_questions`
@@ -126,6 +160,12 @@ ALTER TABLE `abc_questions`
 -- Indexes for table `answers`
 --
 ALTER TABLE `answers`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `answers_archive`
+--
+ALTER TABLE `answers_archive`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -152,31 +192,43 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `abc_answers`
 --
 ALTER TABLE `abc_answers`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
+
+--
+-- AUTO_INCREMENT for table `abc_answers_archive`
+--
+ALTER TABLE `abc_answers_archive`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `abc_questions`
 --
 ALTER TABLE `abc_questions`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `answers`
 --
 ALTER TABLE `answers`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=82;
+
+--
+-- AUTO_INCREMENT for table `answers_archive`
+--
+ALTER TABLE `answers_archive`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `questions`
 --
 ALTER TABLE `questions`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Constraints for dumped tables

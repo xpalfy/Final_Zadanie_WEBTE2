@@ -92,6 +92,7 @@ check(['1']);
             <th>Delete</th>
             <th>Activate</th>
             <th>QR Code</th>
+            <th>Archive</th>
         </tr>
         </thead>
         <tbody>
@@ -273,6 +274,39 @@ check(['1']);
         </div>
     </div>
 </div>
+<div class="modal fade" id="archiveQuestionModal" tabindex="-1" role="dialog" aria-labelledby="archiveQuestionModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="archiveQuestionModalLabel">Archive answers</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="filter-bar">
+                    <div class="form-group">
+                        <label for="filterDate">Filter by Date:</label>
+                        <select id="filterDate" class="form-control">
+                        </select>
+                    </div>
+                </div>
+                <table id="archiveTable" >
+                    <thead>
+                    <tr>
+                        <th>Answer</th>
+                        <th>Count</th>
+                        <th>Time</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 <footer class="page-footer font-small bg-dark">
     <div class="container">
         <div class="text-center py-3 text-light">
@@ -369,6 +403,13 @@ check(['1']);
                                 return `<button onclick="generateQRCode('${row.qr_code}', '${row.type}')" class="btn btn-primary btn-sm" style="min-width: 80%;">QR Code</button>`;
                             },
                             orderable: false
+                        },
+                        {
+                            data: 'id',
+                            title: 'Archive',
+                            render: function (data, type, row) {
+                                return `<button onclick="showArchiveQuestion('${row.id}','${row.type}')" class="btn btn-warning btn-sm" style="min-width: 80%;">Archive</button>`;
+                            },
                         }
                     ],
                     createdRow: function (row) {
@@ -646,6 +687,57 @@ check(['1']);
         $('#changeOptionC').val('');
         $('#changeOptionASwitch, #changeOptionBSwitch, #changeOptionCSwitch').prop('checked', false);
         $('#changeMultipleChoiceOptions').hide();
+    }
+
+    function showArchiveQuestion(id, type) {
+        $.ajax({
+            type: 'POST',
+            url: './questions/fetchArchiveQuestion.php',
+            contentType: 'application/json',
+            data: JSON.stringify({id: id, type: type}),
+            dataType: 'json',
+            success: function (data) {
+                if (data.success) {
+                    $('#archiveQuestionModal').modal('show');
+                    $('#filterDate').on('change', function () {
+                        $('#archiveTable').DataTable().column(2).search(this.value).draw();
+                    });
+                    $('#archiveTable').DataTable().clear().destroy();
+                    $('#archiveTable').DataTable({
+                        data: data.questions,
+                        columns: [
+                            {data: 'answer', title: 'Answer', orderable: false},
+                            {data: 'count', title: 'Count', orderable: false},
+                            {data: 'time', title: 'Time', visible: false, orderable: false}
+                        ],
+                        createdRow: function (row) {
+                            $('td', row).css('text-align', 'center');
+                        },
+                        order : [[1, 'desc']]
+                    });
+                    fillArchiveDates(data.questions);
+                } else {
+                    toastr.error(data.message || 'Error archiving question. Please try again.');
+                }
+            },
+            error: function () {
+                toastr.error('Failed to connect to server. Please check your connection.');
+            }
+        });
+
+    }
+
+    function fillArchiveDates(questions) {
+        let dates = [];
+        questions.forEach(function (question) {
+            if (!dates.includes(question.time)) {
+                dates.push(question.time);
+            }
+        });
+        $('#filterDate').empty().append('<option value="">All Dates</option>');
+        dates.forEach(function (date) {
+            $('#filterDate').append($('<option>').text(date).val(date));
+        });
     }
 
     $(document).ready(function () {

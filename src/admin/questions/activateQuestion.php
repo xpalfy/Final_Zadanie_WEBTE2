@@ -63,10 +63,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             $result = $archivestmt->get_result();
                             if ($result->num_rows > 0) {
                                 $time = date('Y-m-d H:i:s');
-                                $archiveQuery = "INSERT INTO abc_answers_archive (question_id, answer, correct, time) VALUES (?, ?, ?, ?)";
+                                $archiveQuery = "INSERT INTO abc_answers_archive (question_id, answer, count, time) VALUES (?, ?, ?, ?)";
                                 $archiveStmt = $conn->prepare($archiveQuery);
                                 while ($row = $result->fetch_assoc()) {
-                                    $archiveStmt->bind_param('isis', $row['question_id'], $row['answer'], $row['correct'], $time);
+                                    $archiveStmt->bind_param('isis', $row['question_id'], $row['answer'], $row['count'], $time);
                                     $archiveStmt->execute();
                                 }
                                 $archiveStmt->close();
