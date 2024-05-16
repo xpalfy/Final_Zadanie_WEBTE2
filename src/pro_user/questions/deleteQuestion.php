@@ -30,8 +30,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $stmt = $conn->prepare("DELETE FROM answers WHERE question_id = ?");
                     $stmt->bind_param('i', $questionId);
                     $stmt->execute();
+                    $stmt = $conn->prepare("DELETE FROM answers_archive WHERE question_id = ?");
+                    $stmt->bind_param('i', $questionId);
+                    $stmt->execute();
                 } elseif ($data['type'] === 'Multiple Choice') {
                     $stmt = $conn->prepare("DELETE FROM abc_answers WHERE question_id = ?");
+                    $stmt->bind_param('i', $questionId);
+                    $stmt->execute();
+                    $stmt = $conn->prepare("DELETE FROM abc_answers_archive WHERE question_id = ?");
                     $stmt->bind_param('i', $questionId);
                     $stmt->execute();
                 }

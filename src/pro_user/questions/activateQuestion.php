@@ -31,6 +31,57 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $currentStatus = $row['active'];
                 $newStatus = $currentStatus ? 0 : 1;
 
+                if($newStatus == 0){
+                    switch ($data['type']) {
+                        case 'One Answer':
+                            $query = "SELECT * FROM answers WHERE question_id = ?";
+                            $archivestmt = $conn->prepare($query);
+                            $archivestmt->bind_param('i', $questionId);
+                            $archivestmt->execute();
+                            $result = $archivestmt->get_result();
+                            if ($result->num_rows > 0) {
+                                $time = date('Y-m-d H:i:s');
+                                $archiveQuery = "INSERT INTO answers_archive (question_id, answer, count, time) VALUES (?, ?, ?, ?)";
+                                $archiveStmt = $conn->prepare($archiveQuery);
+                                while ($row = $result->fetch_assoc()) {
+                                    $archiveStmt->bind_param('isis', $row['question_id'], $row['answer'], $row['count'], $time);
+                                    $archiveStmt->execute();
+                                }
+                                $archiveStmt->close();
+                                // delete the answers
+                                $deleteQuery = "DELETE FROM answers WHERE question_id = ?";
+                                $deleteStmt = $conn->prepare($deleteQuery);
+                                $deleteStmt->bind_param('i', $questionId);
+                                $deleteStmt->execute();
+                                $deleteStmt->close();
+                            }
+                            break;
+                        case 'Multiple Choice':
+                            $query = "SELECT * FROM abc_answers WHERE question_id = ?";
+                            $archivestmt = $conn->prepare($query);
+                            $archivestmt->bind_param('i', $questionId);
+                            $archivestmt->execute();
+                            $result = $archivestmt->get_result();
+                            if ($result->num_rows > 0) {
+                                $time = date('Y-m-d H:i:s');
+                                $archiveQuery = "INSERT INTO abc_answers_archive (question_id, answer, correct, time) VALUES (?, ?, ?, ?)";
+                                $archiveStmt = $conn->prepare($archiveQuery);
+                                while ($row = $result->fetch_assoc()) {
+                                    $archiveStmt->bind_param('isis', $row['question_id'], $row['answer'], $row['correct'], $time);
+                                    $archiveStmt->execute();
+                                }
+                                $archiveStmt->close();
+                                // delete the answers
+                                $deleteQuery = "DELETE FROM abc_answers WHERE question_id = ?";
+                                $deleteStmt = $conn->prepare($deleteQuery);
+                                $deleteStmt->bind_param('i', $questionId);
+                                $deleteStmt->execute();
+                                $deleteStmt->close();
+                            }
+                            break;
+                    }
+                }
+
                 if ($data['type'] === 'One Answer') {
                     $updateQuery = "UPDATE questions SET active = ? WHERE id = ?";
                 } elseif ($data['type'] === 'Multiple Choice') {
