@@ -122,10 +122,7 @@ function directBackToIndex()
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="login.php">Login</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="register.php">Registration</a>
+                    <a class="nav-link" href="index.php">Menu</a>
                 </li>
             </ul>
         </div>
@@ -188,7 +185,6 @@ function directBackToIndex()
                 type: '<?php echo $type; ?>'
             }),
             success: function (data) {
-                console.log(data);
                 let question = <?php echo json_encode($question); ?>;
                 let answers = data.answers;
                 let vote_count = data.vote_count;
@@ -205,14 +201,36 @@ function directBackToIndex()
                         $('#answers').append(`<div class="span6" id="answersList"></div>`);
                         // append with the answers in a ul
                         for (let i = 0; i < answers.length; i++) {
-                            $('#answersList').append(`<strong>${question.question}</strong><span style="float:right;">${answers[i].count}</span>
+                            let correct = false;
+                            switch (answers[i].answer) {
+                                case 'A':
+                                    if (question.answer === 'A'){
+                                        correct = true;
+                                    }
+                                    answers[i].answer = question.a;
+                                    break;
+                                case 'B':
+                                    if (question.answer === 'B'){
+                                        correct = true;
+                                    }
+                                    answers[i].answer = question.b;
+                                    break;
+                                case 'C':
+                                    if (question.answer === 'C'){
+                                        correct = true;
+                                    }
+                                    answers[i].answer = question.c;
+                                    break;
+                            }
+                            let color = correct ? '#25c525' : '#81bfff';
+                            $('#answersList').append(`<strong>${answers[i].answer}</strong><span style="float:right;">${answers[i].count}</span>
                 <div class="progress active" style="height:2rem;">
-                    <div class="progress-bar" role="progressbar" style="width:${(answers[i].count / vote_count) * 100}%" aria-valuenow="${answers[i].count}" aria-valuemin="0" aria-valuemax="1"></div>
+                    <div class="progress-bar" role="progressbar" style="background-color:${color};width:${(answers[i].count / vote_count) * 100}%" aria-valuenow="${answers[i].count}" aria-valuemin="0" aria-valuemax="1"></div>
                 </div>
                 <br>
-                `);
+                `);}
                             break;
-                        }
+
                 }
                 if(type === 'one_answer') organizeAnswersRandomPlaces();
             },

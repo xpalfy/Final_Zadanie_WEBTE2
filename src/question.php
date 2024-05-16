@@ -123,7 +123,7 @@ function directBackToIndex()
                     <div class="col">
                         <h5>A: ${question.a}</h5>
                     </div>
-                    <div class="col-1" style=" align-items: center;">
+                    <div class="" style=" align-items: center;">
                         <label class="switch">
                             <input type="checkbox" id="OptionASwitch" name="optionASwitch" value="true">
                             <span class="slider round"></span>
@@ -134,7 +134,7 @@ function directBackToIndex()
                     <div class="col">
                         <h5>B: ${question.b}</h5>
                     </div>
-                    <div class="col-1" style=" align-items: center;">
+                    <div class="" style=" align-items: center;">
                         <label class="switch">
                             <input type="checkbox" id="ptionBSwitch" name="optionBSwitch" value="true">
                             <span class="slider round"></span>
@@ -145,7 +145,7 @@ function directBackToIndex()
                     <div class="col">
                         <h5>C: ${question.c}</h5>
                     </div>
-                    <div class="col-1" style=" align-items: center;">
+                    <div class="" style=" align-items: center;">
                         <label class="switch">
                             <input type="checkbox" id="OptionASwitch" name="optionCSwitch" value="true">
                             <span class="slider round"></span>
