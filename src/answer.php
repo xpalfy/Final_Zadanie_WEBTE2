@@ -32,31 +32,6 @@ if ($result->num_rows == 0) {
         directBackToIndex();
     }
 }
-
-switch ($type) {
-    case 'one_answer':
-        $sql = "SELECT * FROM answers WHERE question_id = " . $question['id'];
-        $result = $conn->query($sql);
-        $answers = [];
-        $vote_count = 0;
-        while ($row = $result->fetch_assoc()) {
-            $vote_count += $row['count'];
-            $answers[] = $row;
-        }
-        break;
-    case 'abc_answer':
-        $sql = "SELECT * FROM abc_answers WHERE question_id = " . $question['id'];
-        $result = $conn->query($sql);
-        $answers = [];
-        $vote_count = 0;
-        while ($row = $result->fetch_assoc()) {
-            $vote_count += $row['count'];
-            $answers[] = $row;
-        }
-        break;
-    default:
-        directBackToIndex();
-}
 function directBackToIndex()
 {
     if (session_status() === PHP_SESSION_NONE) {
@@ -96,10 +71,33 @@ function directBackToIndex()
         display: flex;
         justify-content: center;
         align-items: center;
-        background-color: #696969;
         color: white;
         border-radius: 10px;
         margin: 5px;
+    }
+    .answer p:hover{
+        color: #cccccc;
+        animation-name: colorChangeInAnswer;
+        animation-duration: 2s;
+        animation-iteration-count: infinite;
+    }
+
+    @keyframes colorChangeInAnswer {
+        0% {
+            color: #007bff;
+        }
+        25% {
+            color: #28a745;
+        }
+        50% {
+            color: #ffc107;
+        }
+        75% {
+            color: #dc3545;
+        }
+        100% {
+            color: #007bff;
+        }
     }
 </style>
 <body>
@@ -181,13 +179,42 @@ function directBackToIndex()
 
     function getAnswers(){
         $.ajax({
-            url: 'getAnswers.php',
-            type: 'GET',
-            data: {
-                question_id: <?php echo $question['id']; ?>
-            },
+            url: '../getAnswers.php',
+            type: 'POST',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: JSON.stringify({
+                question_id: <?php echo $question['id']; ?>,
+                type: '<?php echo $type; ?>'
+            }),
             success: function (data) {
                 console.log(data);
+                let question = <?php echo json_encode($question); ?>;
+                let answers = data.answers;
+                let vote_count = data.vote_count;
+                let type = '<?php echo $type; ?>';
+                switch (type) {
+                    case 'one_answer':
+                        $('#answers').append(`<div class="container" id="answersList"></div>`);
+                        // append with the answers in a ul
+                        for (let i = 0; i < answers.length; i++) {
+                            $('#answersList').append(`<div class="answer"><p style="margin-bottom:0;font-size:${answers[i].count * 2 / vote_count * 100}px">${answers[i].answer}</p></div>`);
+                        }
+                        break;
+                    case 'abc_answer':
+                        $('#answers').append(`<div class="span6" id="answersList"></div>`);
+                        // append with the answers in a ul
+                        for (let i = 0; i < answers.length; i++) {
+                            $('#answersList').append(`<strong>${question.question}</strong><span style="float:right;">${answers[i].count}</span>
+                <div class="progress active" style="height:2rem;">
+                    <div class="progress-bar" role="progressbar" style="width:${(answers[i].count / vote_count) * 100}%" aria-valuenow="${answers[i].count}" aria-valuemin="0" aria-valuemax="1"></div>
+                </div>
+                <br>
+                `);
+                            break;
+                        }
+                }
+                if(type === 'one_answer') organizeAnswersRandomPlaces();
             },
             error: function (error) {
                 console.log(error);
@@ -197,33 +224,9 @@ function directBackToIndex()
 
     $(document).ready(function () {
         let question = <?php echo json_encode($question); ?>;
-        let type = '<?php echo $type; ?>';
-        console.log(question);
-        console.log(type);
         $('#Question_text').text(question.question);
-        switch (type) {
-            case 'one_answer':
-                $('#answers').append(`<div class="container" id="answersList"></div>`);
-                // append with the answers in a ul
-                <?php if($type == 'one_answer') foreach ($answers as $answer):?>
-                $('#answersList').append(`<div class="answer"><p style="margin-bottom:0;font-size:<?php echo ($answer['count']*2 / $vote_count) * 100 ?>px"><?php echo $answer['answer']; ?></p></div>`);
-                <?php endforeach; ?>
-                break;
-            case 'abc_answer':
-                $('#answers').append(`<div class="span6" id="answersList"></div>`);
-                // append with the answers in a ul
-                <?php if($type == 'abc_answer') foreach ($answers as $answer):?>
-                $('#answersList').append(`
-                <strong><?php echo $question[strtolower($answer['answer'])]; ?></strong><span style="float:right;"><?php echo $answer['count']; ?></span>
-                <div class="progress active" style="height:2rem;">
-                    <div class="progress-bar" role="progressbar" style="<?php if(str_contains($question['answer'],$answer['answer'])){echo "background-color:#25c525;";} ?>width: <?php echo ($answer['count'] / $vote_count) * 100; ?>%" aria-valuenow="<?php echo $answer['count']; ?>" aria-valuemin="0" aria-valuemax="1"></div>
-                </div>
-                <br>
-                `);
-                <?php endforeach; ?>
-                break;
-        }
-        organizeAnswersRandomPlaces();
+        getAnswers();
+        //organizeAnswersRandomPlaces();
     });
 
 
