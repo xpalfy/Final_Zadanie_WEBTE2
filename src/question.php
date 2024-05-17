@@ -61,10 +61,19 @@ function directBackToIndex($keyNotSet, $notActive, $doesntExist)
             'message' => "Question doesn't exist!"
         ];
     }
+
     if ($_SESSION['user']['type'] == 0) {
-        header('Location: ./admin/keyInput.php');
+        if ($_SESSION['slovak'] === true) {
+            header('Location: ./admin/keyInputSK.php');
+        } else {
+            header('Location: ./admin/keyInput.php');
+        }
     } else if ($_SESSION['user']['type'] == 1) {
-        header('Location: ./pro_user/keyInput.php');
+        if ($_SESSion['slovak'] === true) {
+            header('Location: ./pro_user/keyInputSK.php');
+        } else {
+            header('Location: ./pro_user/keyInput.php');
+        }
     } else {
         header('Location: index.php');
     }

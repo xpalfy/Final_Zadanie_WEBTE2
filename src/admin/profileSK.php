@@ -31,9 +31,9 @@ function changePassword($password, $conn): void
     $stmt->close();
     $_SESSION['toast'] = [
         'type' => 'success',
-        'message' => 'Password changed successfully'
+        'message' => 'Heslo bolo úspešne zmenené.'
     ];
-    header('Location: profile.php');
+    header('Location: profileSK.php');
     exit();
 }
 
@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (samePassword($password, $conn)) {
         $_SESSION['toast'] = [
             'type' => 'error',
-            'message' => 'New password must be different from the old one'
+            'message' => 'Nové heslo sa musí líšiť od starého.'
         ];
     } else {
         changePassword($password, $conn);
@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Profile</title>
+    <title>Môj profil</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
@@ -67,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-    <script src="../js/regex.js"></script>
+    <script src="../js/regexSK.js"></script>
 </head>
 <body>
 <script>
@@ -91,25 +91,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="profileSK.php">Slovak Version</a>
+                    <a class="nav-link" href="profile.php">Anglická Verzia</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="menu.php">Menu</a>
+                    <a class="nav-link" href="menuSK.php">Menu</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="users.php">Users</a>
+                    <a class="nav-link" href="usersSK.php">Používatelia</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="questions.php">Questions</a>
+                    <a class="nav-link" href="questionsSK.php">Otázky</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="profile.php">Profile</a>
+                    <a class="nav-link" href="profileSK.php">Môj Profil</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="keyInput.php">Key Input</a>
+                    <a class="nav-link" href="keyInputSK.php">Zadanie Kódu</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="../logout.php">Logout</a>
+                    <a class="nav-link" href="../logout.php">Odhlásenie</a>
                 </li>
             </ul>
         </div>
@@ -121,19 +121,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="card bg-dark">
             <div class="col-12 d-flex flex-column flex-sm-row justify-content-between align-items-center">
                 <div class="mr-2 mb-2">
-                    <h1 class="mt-3 mb-1">Change</br> password</h1>
-                    <h5 class="card-title">Username: <?php echo $_SESSION['user']['username']; ?></h5>
+                    <h1 class="mt-3 mb-1">Modifikácia</br> hesla</h1>
+                    <h5 class="card-title">Používateľské meno: <?php echo $_SESSION['user']['username']; ?></h5>
                 </div>
                 <img src="../img/profile/2.png" alt="avatar" class="avatar img-fluid mt-responsive ml-3 mr-3">
             </div>
             <div class="card-body">
                 <form action="" method="post">
                     <div class="form-group">
-                        <label for="password"><i class="fas fa-lock"></i> Password:</label>
+                        <label for="password"><i class="fas fa-lock"></i> Heslo:</label>
                         <input type="password" name="password" id="password" class="form-control" autocomplete="off"
                                placeholder="*******" required oninput="isValidPassword(this)">
                     </div>
-                    <button type="submit" class="btn btn-primary">Change</button>
+                    <button type="submit" class="btn btn-primary">Odoslať</button>
                 </form>
             </div>
         </div>

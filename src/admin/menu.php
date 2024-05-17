@@ -48,6 +48,9 @@ check(['0']);
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
+                    <a class="nav-link" href="menuSK.php">Slovak Version</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="menu.php">Menu</a>
                 </li>
                 <li class="nav-item">

@@ -12,7 +12,7 @@ check(['0']);
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Users</title>
+    <title>Používatelia</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
@@ -26,7 +26,7 @@ check(['0']);
     <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="../js/regex.js"></script>
+    <script src="../js/regexSK.js"></script>
 
 </head>
 <body>
@@ -51,25 +51,25 @@ check(['0']);
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="usersSK.php">Slovak Version</a>
+                    <a class="nav-link" href="users.php">Anglická Verzia</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="menu.php">Menu</a>
+                    <a class="nav-link" href="menuSK.php">Menu</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="users.php">Users</a>
+                    <a class="nav-link" href="usersSK.php">Používatelia</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="questions.php">Questions</a>
+                    <a class="nav-link" href="questionsSK.php">Otázky</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="profile.php">Profile</a>
+                    <a class="nav-link" href="profileSK.php">Môj Profil</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="keyInput.php">Key Input</a>
+                    <a class="nav-link" href="keyInputSK.php">Zadanie Kódu</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="../logout.php">Logout</a>
+                    <a class="nav-link" href="../logout.php">Odhlásenie</a>
                 </li>
             </ul>
         </div>
@@ -79,9 +79,9 @@ check(['0']);
     <table id="userTable" class="display nowrap" style="width:100%">
         <thead>
         <tr>
-            <th>Username</th>
-            <th>Change</th>
-            <th>Delete</th>
+            <th>Používateľské meno</th>
+            <th>Modifikácia</th>
+            <th>Zmazanie</th>
         </tr>
         </thead>
         <tbody>
@@ -89,8 +89,8 @@ check(['0']);
     </table>
     <div class="d-flex justify-content-center align-items-center">
         <div style="width: 80%;">
-            <button class="btn btn-primary mt-3 btn-block" data-toggle="modal" data-target="#addUserModal">Add
-                User
+            <button class="btn btn-primary mt-3 btn-block" data-toggle="modal" data-target="#addUserModal">
+                Pridať používateľa
             </button>
         </div>
     </div>
@@ -100,7 +100,7 @@ check(['0']);
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addUserModalLabel">Add User</h5>
+                <h5 class="modal-title" id="addUserModalLabel">Pridanie používateľa</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -108,25 +108,25 @@ check(['0']);
             <div class="modal-body">
                 <form id="addQuestionForm">
                     <div class="form-group">
-                        <label for="userType">Select user type:</label>
+                        <label for="userType">Vyberte typ používateľa:</label>
                         <select class="form-control" id="addUserTypeModal" name="addUserTypeModal" required>
                             <option value="1" selected>Admin</option>
                             <option value="2">Pro User</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="username">Username</label>
+                        <label for="username">Používateľské meno</label>
                         <input type="text" class="form-control" id="username" name="username" required
                                oninput="isValidInput(this)">
                     </div>
                     <div class="form-group">
-                        <label for="userPassword">Password</label>
+                        <label for="userPassword">Heslo</label>
                         <input type="password" class="form-control" id="userPassword" name="userPassword"
                                autocomplete="off" required oninput="isValidPassword(this)">
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save User</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvoriť okno</button>
+                        <button type="submit" class="btn btn-primary">Uložiť používateľa</button>
                     </div>
                 </form>
             </div>
@@ -138,7 +138,7 @@ check(['0']);
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="changeUserModalLabel">Change User</h5>
+                <h5 class="modal-title" id="changeUserModalLabel">Modifikácia používateľa</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -147,25 +147,25 @@ check(['0']);
                 <form id="changeUserForm">
                     <input type="hidden" id="changeUserID" name="userId">
                     <div class="form-group">
-                        <label for="changeQuestionType">Select user type:</label>
+                        <label for="changeQuestionType">Vyberte typ používateľa:</label>
                         <select class="form-control" id="changeQuestionType" name="questionType" required>
                             <option value="0">Admin</option>
                             <option value="1">Pro User</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="changeUsername">Username</label>
+                        <label for="changeUsername">Používateľské meno</label>
                         <input type="text" class="form-control" id="changeUsername" name="username" required
                                oninput="isValidInput(this)">
                     </div>
                     <div class="form-group">
-                        <label for="changeQuestionCategory">Password</label>
+                        <label for="changeQuestionCategory">Heslo</label>
                         <input type="password" class="form-control" id="changeUserPassword" name="changeUserPassword"
                                autocomplete="off" placeholder="*******" oninput="isValidPassword(this)">
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvoriť okno</button>
+                        <button type="submit" class="btn btn-primary">Uložiť modifikácie</button>
                     </div>
                 </form>
             </div>
@@ -193,17 +193,17 @@ check(['0']);
                         {data: 'username'},
                         {
                             data: 'id',
-                            title: 'Change',
+                            title: 'Modifikácia',
                             render: function (data, type, row) {
-                                return `<button onclick="changeUser('${row.id}')" class="btn btn-primary btn-sm" style="min-width: 80%;">Change</button>`;
+                                return `<button onclick="changeUser('${row.id}')" class="btn btn-primary btn-sm" style="min-width: 80%;">Modifikácia</button>`;
                             },
                             orderable: false
                         },
                         {
                             data: 'id',
-                            title: 'Delete',
+                            title: 'Zmazanie',
                             render: function (data, type, row) {
-                                return `<button onclick="deleteUser('${row.id}')" class="btn btn-danger btn-sm" style="min-width: 80%;">Delete</button>`;
+                                return `<button onclick="deleteUser('${row.id}')" class="btn btn-danger btn-sm" style="min-width: 80%;">Zmazanie</button>`;
                             },
                             orderable: false
                         }
@@ -211,7 +211,7 @@ check(['0']);
                 });
             },
             error: function () {
-                toastr.error('Failed to load questions. Please try again.');
+                toastr.error('Nepodarilo sa načítať otázky. Skúste to prosím znova.');
             }
         });
     }
@@ -232,13 +232,13 @@ check(['0']);
                     $('#userTable').DataTable().clear().destroy();
                     clearAddModal();
                     fetchUsers();
-                    toastr.success('User added successfully.');
+                    toastr.success('Používateľ bol úspešne pridaný.');
                 } else {
                     toastr.error(data.message);
                 }
             },
             error: function () {
-                toastr.error('Failed to add the user. Please try again.');
+                toastr.error('Nepodarilo sa pridať používateľa. Skúste to prosím znova.');
             }
         });
     }
@@ -257,11 +257,11 @@ check(['0']);
                     $('#changeQuestionType').val(data.data.type);
                     $('#changeUserModal').modal('show');
                 } else {
-                    toastr.error('Failed to load the user. Please try again.');
+                    toastr.error('Nepodarilo sa načítať používateľa. Skúste to prosím znova.');
                 }
             },
             error: function () {
-                toastr.error('Failed to load the user. Please try again.');
+                toastr.error('Nepodarilo sa načítať používateľa. Skúste to prosím znova.');
             }
         });
     }
@@ -286,26 +286,27 @@ check(['0']);
                     $('#userTable').DataTable().clear().destroy();
                     clearChangeModal();
                     fetchUsers();
-                    toastr.success('User changed successfully.');
+                    toastr.success('Používateľ bol úspešne modifikovaný.');
                 } else {
                     toastr.error(data.message);
                 }
             },
             error: function () {
-                toastr.error('Failed to change the user. Please try again.');
+                toastr.error('Nepodarilo sa zmeniť používateľa. Skúste to prosím znova.');
             }
         });
     });
 
     function deleteUser(id, type) {
         Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
+            title: 'Ste si istí?',
+            text: "Toto sa nedá vrátiť späť!",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
+            confirmButtonText: 'Áno, vymažte ho!',
+            cancelButtonText: 'Vrátiť späť'
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
@@ -318,13 +319,13 @@ check(['0']);
                         if (data.success) {
                             $('#userTable').DataTable().clear().destroy();
                             fetchUsers();
-                            toastr.success('User deleted successfully.');
+                            toastr.success('Používateľ bol úspešne odstránený.');
                         } else {
-                            toastr.error('Failed to delete the question. Please try again.');
+                            toastr.error('Nepodarilo sa vymazať otázku. Skúste to prosím znova.');
                         }
                     },
                     error: function () {
-                        toastr.error('Failed to delete the question. Please try again.');
+                        toastr.error('Nepodarilo sa vymazať otázku. Skúste to prosím znova.');
                     }
                 });
             }
