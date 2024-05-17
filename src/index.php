@@ -73,6 +73,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <li class="nav-item">
                     <a class="nav-link" href="register.php">Registration</a>
                 </li>
+                <li>
+                    <a class="nav-link" href="help.php">Help</a>
+                </li>
             </ul>
         </div>
     </div>
