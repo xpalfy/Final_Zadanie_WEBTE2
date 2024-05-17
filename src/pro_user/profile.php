@@ -91,6 +91,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
+                    <a class="nav-link" href="profileSK.php">Slovak Version</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="menu.php">Menu</a>
                 </li>
                 <li class="nav-item">
@@ -115,7 +118,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="card bg-dark">
             <div class="col-12 d-flex flex-column flex-sm-row justify-content-between align-items-center">
                 <div class="mr-2 mb-2">
-                    <h1 class="mt-3 mb-1">Change password</h1>
+                    <h1 class="mt-3 mb-1">Change</br> password</h1>
                     <h5 class="card-title">Username: <?php echo $_SESSION['user']['username']; ?></h5>
                 </div>
                 <img src="../img/profile/1.png" alt="avatar" class="avatar img-fluid mt-responsive ml-3 mr-3">

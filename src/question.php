@@ -69,7 +69,7 @@ function directBackToIndex($keyNotSet, $notActive, $doesntExist)
             header('Location: ./admin/keyInput.php');
         }
     } else if ($_SESSION['user']['type'] == 1) {
-        if ($_SESSion['slovak'] === true) {
+        if ($_SESSION['slovak'] === true) {
             header('Location: ./pro_user/keyInputSK.php');
         } else {
             header('Location: ./pro_user/keyInput.php');

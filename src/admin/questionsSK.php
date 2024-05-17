@@ -107,7 +107,7 @@ check(['0']);
             <th>Zmazanie</th>
             <th>Aktivovanie</th>
             <th>QR Kód</th>
-            <th>Archivovať</th>
+            <th>Archivovanie</th>
         </tr>
         </thead>
         <tbody>
@@ -214,7 +214,7 @@ check(['0']);
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="changeQuestionModalLabel">Zmeniť otázku</h5>
+                <h5 class="modal-title" id="changeQuestionModalLabel">Modifikácia otázky</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -540,7 +540,7 @@ check(['0']);
         let fullUrl = `https://node84.webte.fei.stuba.sk:1000/question.php?key=${qrCode}&type=${type}`;
         Swal.fire({
             title: 'Kód izby: ' + qrCode,
-            text: 'Naskenujte QR kód, aby ste si mohli zobraziť otázku:',
+            text: 'Naskenujte QR kód, aby ste si mohli zobraziť otázku',
             imageUrl: `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${fullUrl}`,
             imageWidth: 150,
             imageHeight: 150,
@@ -592,8 +592,10 @@ check(['0']);
                         checkAnswers(data.question.answer);
                     } else {
                         $('#changeQuestionType').empty()
-                            .append($('<option>', {value: '1', text: 'Jedna odpoveď'}))
-                            .val('1');
+                            .append($('<option>', {
+                                value: '1',
+                                text: 'Jedna odpoveď'
+                        })).val('1');
                         $('#changeMultipleChoiceOptions').hide();
                         $('#changeOptionA').val('');
                         $('#changeOptionB').val('');
@@ -651,7 +653,7 @@ check(['0']);
             success: function (data) {
                 if (data.success) {
                     $('#changeQuestionModal').modal('hide');
-                    toastr.success('Otázka úspešne aktualizovaná!');
+                    toastr.success('Otázka bola úspešne aktualizovaná!');
                     $('#questionsTable').DataTable().clear().destroy();
                     loadCategories();
                     loadUsers();
@@ -694,7 +696,7 @@ check(['0']);
                             loadTime();
                             fetchQuestions();
                             $('#filterType').val('');
-                            toastr.success('Otázka úspešne vymazaná!');
+                            toastr.success('Otázka bola úspešne vymazaná!');
                         } else {
                             toastr.error(data.message || 'Chyba pri odstraňovaní otázky.');
                         }
@@ -810,7 +812,7 @@ check(['0']);
                     });
                     fillArchiveDates(data.questions);
                 } else {
-                    toastr.error(data.message || 'Otázka na archiváciu chýb. Skúste to prosím znova.');
+                    toastr.error(data.message || 'Nepodarilo sa archivovať otázku. Skúste to prosím znova.');
                 }
             },
             error: function () {
@@ -945,7 +947,7 @@ check(['0']);
                         loadTime();
                         fetchQuestions();
                     } else {
-                        toastr.error(data.message || 'Chyba pri pridania otázky. Skúste to prosím znova.');
+                        toastr.error(data.message || 'Chyba pri pridaní otázky. Skúste to prosím znova.');
                     }
                 },
                 error: function () {

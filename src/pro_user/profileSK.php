@@ -1,47 +1,68 @@
 <?php
-function redirectUser($key)
+require '../checkType.php';
+require '../config.php';
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+check(['1']);
+$conn = getDatabaseConnection();
+
+function samePassword($password, $conn): bool
 {
-    if (session_status() === PHP_SESSION_NONE) {
-        session_start();
-    }
+    $id = $_SESSION['user']['id'];
+    $hash = null;
+    $stmt = $conn->prepare('SELECT password FROM users WHERE id = ?');
+    $stmt->bind_param('i', $id);
+    $stmt->execute();
+    $stmt->store_result();
+    $stmt->bind_result($hash);
+    $stmt->fetch();
+    $stmt->close();
+    return password_verify($password, $hash);
+}
 
-
-    if (!preg_match('/^[a-zA-Z0-9]{5}$/', $key)) {
-        $_SESSION['toast'] = [
-            'type' => 'error',
-            'message' => 'Invalidný formát kódu'
-        ];
-        header('Location: https://node84.webte.fei.stuba.sk:1000/admin/keyInputSK.php');
-        exit();
-    }
-
-    $_SESSION['key'] = (int)$key;
-    $_SESSION['slovak'] = true;
-    $link = 'https://node84.webte.fei.stuba.sk:1000/question.php?key=' . $key;
-    header('Location: ' . $link);
+function changePassword($password, $conn): void
+{
+    $id = $_SESSION['user']['id'];
+    $password = password_hash($password, PASSWORD_DEFAULT);
+    $stmt = $conn->prepare('UPDATE users SET password = ? WHERE id = ?');
+    $stmt->bind_param('si', $password, $id);
+    $stmt->execute();
+    $stmt->close();
+    $_SESSION['toast'] = [
+        'type' => 'success',
+        'message' => 'Heslo bolo úspešne zmenené.'
+    ];
+    header('Location: profileSK.php');
     exit();
 }
 
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $key = $_POST['key'];
-    redirectUser($key);
+    $password = $_POST['password'];
+    if (samePassword($password, $conn)) {
+        $_SESSION['toast'] = [
+            'type' => 'error',
+            'message' => 'Nové heslo sa musí líšiť od starého.'
+        ];
+    } else {
+        changePassword($password, $conn);
+    }
 }
-
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Zadanie kódu</title>
+    <title>Môj profil</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
     <link rel="stylesheet" href="../styles/base.css">
-    <link rel="stylesheet" href="../styles/admin.css">
+    <link rel="stylesheet" href="../styles/pro_user.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -70,13 +91,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="keyInput.php">Anglická Verzia</a>
+                    <a class="nav-link" href="profile.php">Anglická Verzia</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="menuSK.php">Menu</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="usersSK.php">Používatelia</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="questionsSK.php">Otázky</a>
@@ -94,23 +112,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
 </nav>
+
 <div class="container cont justify-content-center align-items-center">
     <div class="col-sm-10 col-md-10 col-lg-8">
         <div class="card bg-dark">
+            <div class="col-12 d-flex flex-column flex-sm-row justify-content-between align-items-center">
+                <div class="mr-2 mb-2">
+                    <h1 class="mt-3 mb-1">Modifikácia</br> hesla</h1>
+                    <h5 class="card-title">Používateľské meno: <?php echo $_SESSION['user']['username']; ?></h5>
+                </div>
+                <img src="../img/profile/1.png" alt="avatar" class="avatar img-fluid mt-responsive ml-3 mr-3">
+            </div>
             <div class="card-body">
-                <h1 class="text-center mb-4">Kód otázky</h1>
                 <form action="" method="post">
                     <div class="form-group">
-                        <label for="key"><i class="fas fa-hashtag"></i> Kód:</label>
-                        <input type="text" class="form-control" id="number" name="key" required
-                               oninput="isValidKey(this)">
+                        <label for="password"><i class="fas fa-lock"></i> Heslo:</label>
+                        <input type="password" name="password" id="password" class="form-control" autocomplete="off"
+                               placeholder="*******" required oninput="isValidPassword(this)">
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block">Odoslať</button>
+                    <button type="submit" class="btn btn-primary">Odoslať</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
 <footer class="page-footer font-small bg-dark">
     <div class="container">
         <div class="text-center py-3 text-light">

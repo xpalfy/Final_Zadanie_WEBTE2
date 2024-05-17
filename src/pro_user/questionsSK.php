@@ -12,7 +12,7 @@ check(['1']);
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Questions</title>
+    <title>Otázky</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
@@ -27,7 +27,7 @@ check(['1']);
     <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="../js/regex.js"></script>
+    <script src="../js/regexSK.js"></script>
 
 </head>
 <body>
@@ -52,22 +52,22 @@ check(['1']);
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="questionsSK.php">Slovak Version</a>
+                    <a class="nav-link" href="questions.php">Anglická Verzia</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="menu.php">Menu</a>
+                    <a class="nav-link" href="menuSK.php">Menu</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="questions.php">Questions</a>
+                    <a class="nav-link" href="questionsSK.php">Otázky</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="profile.php">Profile</a>
+                    <a class="nav-link" href="profileSK.php">Môj Profil</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="keyInput.php">Key Input</a>
+                    <a class="nav-link" href="keyInputSK.php">Zadanie Kódu</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="../logout.php">Logout</a>
+                    <a class="nav-link" href="../logout.php">Odhlásenie</a>
                 </li>
             </ul>
         </div>
@@ -76,29 +76,29 @@ check(['1']);
 <div class="cont" style="width: 80%; margin: 60px auto;">
     <div class="filter-bar">
         <div class="form-group">
-            <label for="filterCategory">Filter by Category:</label>
+            <label for="filterCategory">Filtrovanie podľa kategórie:</label>
             <select id="filterCategory" class="form-control">
-                <option value="">All Categories</option>
+                <option value="">Všetky kategórie</option>
             </select>
         </div>
         <div class="form-group">
-            <label for="filterTime">Filter by Time:</label>
+            <label for="filterTime">Filtrovanie podľa dátumu:</label>
             <select id="filterTime" class="form-control">
-                <option value="">All Time</option>
+                <option value="">Všetky dátumy</option>
             </select>
         </div>
     </div>
     <table id="questionsTable" class="display nowrap" style="width:100%">
         <thead>
         <tr>
-            <th>Question</th>
-            <th>Category</th>
-            <th>Time</th>
-            <th>Change</th>
-            <th>Delete</th>
-            <th>Activate</th>
-            <th>QR Code</th>
-            <th>Archive</th>
+            <th>Otázka</th>
+            <th>Kategória</th>
+            <th>Dátum</th>
+            <th>Modifikácia</th>
+            <th>Zmazanie</th>
+            <th>Aktivovanie</th>
+            <th>QR Kód</th>
+            <th>Archivovanie</th>
         </tr>
         </thead>
         <tbody>
@@ -106,8 +106,8 @@ check(['1']);
     </table>
     <div class="d-flex justify-content-center align-items-center">
         <div style="width: 80%;">
-            <button class="btn btn-primary mt-3 btn-block" data-toggle="modal" data-target="#addQuestionModal">Add
-                Question
+            <button class="btn btn-primary mt-3 btn-block" data-toggle="modal" data-target="#addQuestionModal">Pridať
+                Otázku
             </button>
         </div>
     </div>
@@ -117,7 +117,7 @@ check(['1']);
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addQuestionModalLabel">Add New Question</h5>
+                <h5 class="modal-title" id="addQuestionModalLabel">Pridanie novej otázky</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -125,25 +125,25 @@ check(['1']);
             <div class="modal-body">
                 <form id="addQuestionForm">
                     <div class="form-group">
-                        <label for="questionType">Select question type:</label>
+                        <label for="questionType">Vyberte typ otázky:</label>
                         <select class="form-control" id="questionType" name="questionType" required>
-                            <option value="1" selected>One answer</option>
-                            <option value="2">Multiple Choice</option>
+                            <option value="1" selected>Jedna odpoveď</option>
+                            <option value="2">Viaceré možnosti</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="questionText">Question Text:</label>
+                        <label for="questionText">Text otázky:</label>
                         <textarea class="form-control" id="questionText" name="questionText" required
                                   oninput="isValidQuestion(this)"></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="questionCategory">Category:</label>
+                        <label for="questionCategory">Kategória:</label>
                         <input type="text" class="form-control" id="questionCategory" name="questionCategory" required
                                oninput="isValidText(this)">
                     </div>
                     <div id="multipleChoiceOptions" style="display:none;">
                         <div class="form-group">
-                            <label for="optionA">Option A:</label>
+                            <label for="optionA">Možnosť A:</label>
                             <div class="row">
                                 <div class="col-9">
                                     <input type="text" class="form-control" id="optionA" name="optionA" oninput="isValidText(this)">
@@ -157,7 +157,7 @@ check(['1']);
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="optionB">Option B:</label>
+                            <label for="optionB">Možnosť B:</label>
                             <div class="row">
                                 <div class="col-9">
                                     <input type="text" class="form-control" id="optionB" name="optionB" oninput="isValidText(this)">
@@ -171,7 +171,7 @@ check(['1']);
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="optionC">Option C:</label>
+                            <label for="optionC">Možnosť C:</label>
                             <div class="row">
                                 <div class="col-9">
                                     <input type="text" class="form-control" id="optionC" name="optionC" oninput="isValidText(this)">
@@ -186,8 +186,8 @@ check(['1']);
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save Question</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvoriť okno</button>
+                        <button type="submit" class="btn btn-primary">Uložiť otázku</button>
                     </div>
                 </form>
             </div>
@@ -199,7 +199,7 @@ check(['1']);
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="changeQuestionModalLabel">Change Question</h5>
+                <h5 class="modal-title" id="changeQuestionModalLabel">Modifikácia otázky</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -208,25 +208,25 @@ check(['1']);
                 <form id="changeQuestionForm">
                     <input type="hidden" id="changeQuestionId" name="questionId">
                     <div class="form-group">
-                        <label for="changeQuestionType">Select question type:</label>
+                        <label for="changeQuestionType">Vyberte typ otázky:</label>
                         <select class="form-control" id="changeQuestionType" name="questionType" required>
-                            <option value="1">One answer</option>
-                            <option value="2">Multiple Choice</option>
+                            <option value="1">Jedna odpoveď</option>
+                            <option value="2">Viaceré možnosti</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="changeQuestionText">Question Text:</label>
+                        <label for="changeQuestionText">Text otázky:</label>
                         <textarea class="form-control" id="changeQuestionText" name="questionText" required
                                   oninput="isValidQuestion(this)"></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="changeQuestionCategory">Category:</label>
+                        <label for="changeQuestionCategory">Kategória:</label>
                         <input type="text" class="form-control" id="changeQuestionCategory" name="questionCategory"
                                required oninput="isValidInput(this)">
                     </div>
                     <div id="changeMultipleChoiceOptions" style="display:none;">
                         <div class="form-group">
-                            <label for="changeOptionA">Option A:</label>
+                            <label for="changeOptionA">Možnosť A:</label>
                             <div class="row">
                                 <div class="col-9">
                                     <input type="text" class="form-control" id="changeOptionA" name="optionA"
@@ -241,7 +241,7 @@ check(['1']);
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="changeOptionB">Option B:</label>
+                            <label for="changeOptionB">Možnosť B:</label>
                             <div class="row">
                                 <div class="col-9">
                                     <input type="text" class="form-control" id="changeOptionB" name="optionB"
@@ -256,7 +256,7 @@ check(['1']);
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="changeOptionC">Option C:</label>
+                            <label for="changeOptionC">Možnosť C:</label>
                             <div class="row">
                                 <div class="col-9">
                                     <input type="text" class="form-control" id="changeOptionC" name="optionC"
@@ -272,8 +272,8 @@ check(['1']);
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvoriť okno</button>
+                        <button type="submit" class="btn btn-primary">Uložiť modifikácie</button>
                     </div>
                 </form>
             </div>
@@ -285,7 +285,7 @@ check(['1']);
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="archiveQuestionModalLabel">Archive answers</h5>
+                <h5 class="modal-title" id="archiveQuestionModalLabel">Archivovať odpovede</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -293,7 +293,7 @@ check(['1']);
             <div class="modal-body">
                 <div class="filter-bar">
                     <div class="form-group">
-                        <label for="filterDate">Filter by Date:</label>
+                        <label for="filterDate">Filtrovanie podľa času:</label>
                         <select id="filterDate" class="form-control">
                         </select>
                     </div>
@@ -301,9 +301,9 @@ check(['1']);
                 <table id="archiveTable" >
                     <thead>
                     <tr>
-                        <th>Answer</th>
-                        <th>Count</th>
-                        <th>Time</th>
+                        <th>Odpoveď</th>
+                        <th>Počet</th>
+                        <th>Čas</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -311,7 +311,7 @@ check(['1']);
                 </table>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-warning" data-dismiss="modal" onclick="downloadAnswers()">Export as .json</button>
+                <button type="button" class="btn btn-warning" data-dismiss="modal" onclick="downloadAnswers()">Exportovať ako .json</button>
             </div>
         </div>
     </div>
@@ -331,16 +331,16 @@ check(['1']);
             dataType: 'json',
             success: function (data) {
                 if (data.success) {
-                    $('#filterCategory').empty().append('<option value="">All Categories</option>');
+                    $('#filterCategory').empty().append('<option value="">Všetky kategórie</option>');
                     data.categories.forEach(function (category) {
                         $('#filterCategory').append($('<option>').text(category).val(category));
                     });
                 } else {
-                    toastr.error(data.message || 'Error loading categories.');
+                    toastr.error(data.message || 'Chyba pri načítaní kategórií.');
                 }
             },
             error: function () {
-                toastr.error('Failed to load categories.');
+                toastr.error('Chyba pri načítaní kategórií.');
             }
         });
     }
@@ -352,16 +352,16 @@ check(['1']);
             dataType: 'json',
             success: function (data) {
                 if (data.success) {
-                    $('#filterTime').empty().append('<option value="">All Time</option>');
+                    $('#filterTime').empty().append('<option value="">Všetky dátumy</option>');
                     data.created_dates.forEach(function (date) {
                         $('#filterTime').append($('<option>').text(date).val(date));
                     });
                 } else {
-                    toastr.error(data.message || 'Error loading time.');
+                    toastr.error(data.message || 'Chyba pri načítavaní dátumu.');
                 }
             },
             error: function () {
-                toastr.error('Failed to load time.');
+                toastr.error('Chyba pri načítavaní dátumu.');
             }
         });
     }
@@ -378,46 +378,46 @@ check(['1']);
                     data: data.data,
                     responsive: true,
                     columns: [
-                        {data: 'question', title: 'Question'},
-                        {data: 'category', title: 'Category',visible: false},
-                        {data: 'time', title: 'Time',visible: false},
+                        {data: 'question', title: 'Otázka'},
+                        {data: 'category', title: 'Kategória',visible: false},
+                        {data: 'time', title: 'Dátum',visible: false},
                         {
                             data: 'id',
-                            title: 'Change',
+                            title: 'Modifikácia',
                             render: function (data, type, row) {
-                                return `<button onclick="changeQuestion('${row.id}','${row.type}')" class="btn btn-primary btn-sm" style="min-width: 80%;">Change</button>`;
+                                return `<button onclick="changeQuestion('${row.id}','${row.type}')" class="btn btn-primary btn-sm" style="min-width: 80%;">Modifikovať</button>`;
                             },
                             orderable: false
                         },
                         {
                             data: 'id',
-                            title: 'Delete',
+                            title: 'Zmazanie',
                             render: function (data, type, row) {
-                                return `<button onclick="deleteQuestion('${row.id}','${row.type}')" class="btn btn-danger btn-sm" style="min-width: 80%;">Delete</button>`;
+                                return `<button onclick="deleteQuestion('${row.id}','${row.type}')" class="btn btn-danger btn-sm" style="min-width: 80%;">Zmazať</button>`;
                             },
                             orderable: false
                         },
                         {
                             data: 'id',
-                            title: 'Activate',
+                            title: 'Aktivovanie',
                             render: function (data, type, row) {
-                                return `<button onclick="activateQuestion('${row.id}','${row.type}')" class="btn btn-${row.active === 'true' ? 'success' : 'secondary'} btn-sm" style="min-width: 80%;">${row.active === 'true' ? 'Active' : 'Inactive'}</button>`;
+                                return `<button onclick="activateQuestion('${row.id}','${row.type}')" class="btn btn-${row.active === 'true' ? 'success' : 'secondary'} btn-sm" style="min-width: 80%;">${row.active === 'true' ? 'Aktivovaná' : 'Deaktivovaná'}</button>`;
                             },
                             orderable: false
                         },
                         {
                             data: 'id',
-                            title: 'QR Code',
+                            title: 'QR Kód',
                             render: function (data, type, row) {
-                                return `<button onclick="generateQRCode('${row.qr_code}', '${row.type}')" class="btn btn-primary btn-sm" style="min-width: 80%;">QR Code</button>`;
+                                return `<button onclick="generateQRCode('${row.qr_code}', '${row.type}')" class="btn btn-primary btn-sm" style="min-width: 80%;">QR Kód</button>`;
                             },
                             orderable: false
                         },
                         {
                             data: 'id',
-                            title: 'Archive',
+                            title: 'Archivovanie',
                             render: function (data, type, row) {
-                                return `<button onclick="showArchiveQuestion('${row.id}','${row.type}')" class="btn btn-warning btn-sm" style="min-width: 80%;">Archive</button>`;
+                                return `<button onclick="showArchiveQuestion('${row.id}','${row.type}')" class="btn btn-warning btn-sm" style="min-width: 80%;">Archivovať</button>`;
                             },
                         }
                     ],
@@ -454,7 +454,7 @@ check(['1']);
                 });
             },
             error: function () {
-                toastr.error('Failed to load questions. Please try again.');
+                toastr.error('Nepodarilo sa načítať otázky. Skúste to prosím znova.');
             }
         });
     }
@@ -462,12 +462,12 @@ check(['1']);
     function generateQRCode(qrCode) {
         let fullUrl = `https://node84.webte.fei.stuba.sk:1000/question.php?key=${qrCode}`;
         Swal.fire({
-            title: 'Room Code: ' + qrCode,
-            text: 'Scan the QR code to view the question',
+            title: 'Kód izby: ' + qrCode,
+            text: 'Naskenujte QR kód, aby ste si mohli zobraziť otázku',
             imageUrl: `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${fullUrl}`,
             imageWidth: 150,
             imageHeight: 150,
-            imageAlt: 'QR Code',
+            imageAlt: 'QR Kód',
             showCloseButton: true,
             showConfirmButton: false
         });
@@ -506,7 +506,7 @@ check(['1']);
                     if (type === 'Multiple Choice') {
                         $('#changeQuestionType').empty().append($('<option>', {
                             value: '2',
-                            text: 'Multiple Choice'
+                            text: 'Viaceré možnosti'
                         })).val('2');
                         $('#changeMultipleChoiceOptions').show();
                         $('#changeOptionA').val(data.question.options.a);
@@ -527,11 +527,11 @@ check(['1']);
 
                     $('#changeQuestionModal').modal('show');
                 } else {
-                    toastr.error(data.message || 'Error fetching question details.');
+                    toastr.error(data.message || 'Chyba pri načítavaní podrobností o otázke.');
                 }
             },
             error: function () {
-                toastr.error('Failed to fetch question details.');
+                toastr.error('Chyba pri načítavaní podrobností o otázke.');
             }
         });
     }
@@ -576,31 +576,32 @@ check(['1']);
             success: function (data) {
                 if (data.success) {
                     $('#changeQuestionModal').modal('hide');
-                    toastr.success('Question updated successfully!');
+                    toastr.success('Otázka bola úspešne aktualizovaná!');
                     $('#questionsTable').DataTable().clear().destroy();
                     loadCategories();
                     loadTime();
                     clearChangeModal();
                     fetchQuestions();
                 } else {
-                    toastr.error(data.message || 'Error updating question.');
+                    toastr.error(data.message || 'Chyba pri aktualizácii otázky.');
                 }
             },
             error: function () {
-                toastr.error('Failed to update question.');
+                toastr.error('Chyba pri aktualizácii otázky.');
             }
         });
     });
 
     function deleteQuestion(id, type) {
         Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
+            title: 'Ste si istí?',
+            text: "Toto už nebudete môcť vrátiť späť!",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
+            confirmButtonText: 'Áno, vymažte ho!',
+            cancelButtonText:  'Vrátiť späť'
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
@@ -616,13 +617,13 @@ check(['1']);
                             loadTime();
                             fetchQuestions();
                             $('#filterType').val('');
-                            toastr.success('Question deleted successfully!');
+                            toastr.success('Otázka bola úspešne vymazaná!');
                         } else {
-                            toastr.error(data.message || 'Error deleting question.');
+                            toastr.error(data.message || 'Chyba pri odstraňovaní otázky.');
                         }
                     },
                     error: function () {
-                        toastr.error('Failed to delete question.');
+                        toastr.error('Chyba pri odstraňovaní otázky.');
                     }
                 });
             }
@@ -641,16 +642,16 @@ check(['1']);
                     $('#questionsTable').DataTable().clear().destroy();
                     fetchQuestions();
                     if (data.active) {
-                        toastr.success('Question activated successfully!');
+                        toastr.success('Otázka bola úspešne aktivovaná!');
                     } else {
-                        toastr.success('Question deactivated successfully!');
+                        toastr.success('Otázka bola úspešne deaktivovaná!');
                     }
                 } else {
-                    toastr.error(data.message || 'Error changing question status. Please try again.');
+                    toastr.error(data.message || 'Chyba pri zmene stavu otázky. Skúste to prosím znova.');
                 }
             },
             error: function () {
-                toastr.error('Failed to connect to server. Please check your connection.');
+                toastr.error('Nepodarilo sa pripojiť k serveru. Skontrolujte prosím svoje pripojenie.');
             }
         });
     }
@@ -721,9 +722,9 @@ check(['1']);
                     $('#archiveTable').DataTable({
                         data: data.questions,
                         columns: [
-                            {data: 'answer', title: 'Answer', orderable: false},
-                            {data: 'count', title: 'Count', orderable: false},
-                            {data: 'time', title: 'Time', visible: false, orderable: false}
+                            {data: 'answer', title: 'Odpoveď', orderable: false},
+                            {data: 'count', title: 'Počet', orderable: false},
+                            {data: 'time', title: 'Čas', visible: false, orderable: false}
                         ],
                         createdRow: function (row) {
                             $('td', row).css('text-align', 'center');
@@ -732,11 +733,11 @@ check(['1']);
                     });
                     fillArchiveDates(data.questions);
                 } else {
-                    toastr.error(data.message || 'Error archiving question. Please try again.');
+                    toastr.error(data.message || 'Nepodarilo sa archivovať otázku. Skúste to prosím znova.');
                 }
             },
             error: function () {
-                toastr.error('Failed to connect to server. Please check your connection.');
+                toastr.error('Nepodarilo sa pripojiť k serveru. Skontrolujte prosím svoje pripojenie.');
             }
         });
 
@@ -749,7 +750,7 @@ check(['1']);
                 dates.push(question.time);
             }
         });
-        $('#filterDate').empty().append('<option value="all">All Dates</option>');
+        $('#filterDate').empty().append('<option value="all">Všetky časy</option>');
         dates.forEach(function (date) {
             $('#filterDate').append($('<option>').text(date).val(date));
         });
@@ -788,13 +789,13 @@ check(['1']);
                     document.body.appendChild(a);
                     a.click();
                     a.remove();
-                    toastr.success('Answers downloaded successfully!');
+                    toastr.success('Odpovede boli úspešne stiahnuté!');
                 } else {
-                    toastr.error(data.message || 'Error downloading answers. Please try again.');
+                    toastr.error(data.message || 'Chyba pri sťahovaní odpovedí. Skúste to prosím znova.');
                 }
             },
             error: function () {
-                toastr.error('Failed to connect to server. Please check your connection.');
+                toastr.error('Nepodarilo sa pripojiť k serveru. Skontrolujte prosím svoje pripojenie.');
             }
         });
     }
@@ -856,7 +857,7 @@ check(['1']);
                 dataType: 'json',
                 success: function (data) {
                     if (data.success) {
-                        toastr.success('Question added successfully!');
+                        toastr.success('Otázka bola úspešne pridaná!');
                         $('#addQuestionModal').modal('hide');
                         $('#questionsTable').DataTable().clear().destroy();
                         clearAddModal();
@@ -864,11 +865,11 @@ check(['1']);
                         loadTime();
                         fetchQuestions();
                     } else {
-                        toastr.error(data.message || 'Error adding question. Please try again.');
+                        toastr.error(data.message || 'Chyba pri pridaní otázky. Skúste to prosím znova.');
                     }
                 },
                 error: function () {
-                    toastr.error('Failed to connect to server. Please check your connection.');
+                    toastr.error('Nepodarilo sa pripojiť k serveru. Skontrolujte prosím svoje pripojenie.');
                 }
             });
         });
