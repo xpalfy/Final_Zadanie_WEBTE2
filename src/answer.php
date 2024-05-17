@@ -164,6 +164,20 @@ function directBackToIndex($keyNotSet, $notActive, $doesntExist)
     </div>
 </footer>
 <script>
+    const ws = new WebSocket('ws://yourserver:8282');
+
+    ws.onopen = function() {
+        console.log('Connected to the WebSocket server');
+    };
+
+    ws.onmessage = function(event) {
+        const data = JSON.parse(event.data);
+        updateAnswers(data);
+    };
+
+    ws.onclose = function() {
+        console.log('Disconnected from the WebSocket server');
+    };
 
     function organizeAnswersRandomPlaces() {
         let parent = document.getElementById('answersList');
@@ -252,6 +266,51 @@ function directBackToIndex($keyNotSet, $notActive, $doesntExist)
                 console.log(error);
             }
         });
+    }
+
+    function updateAnswers(data) {
+        let answers = data.answers;
+        let vote_count = data.vote_count;
+        let type = '<?php echo $type; ?>';
+
+        $('#answers').empty(); // Clear existing answers
+
+        switch (type) {
+            case 'one_answer':
+                $('#answers').append('<div class="container" id="answersList"></div>');
+                for (let i = 0; i < answers.length; i++) {
+                    $('#answersList').append(`<div class="answer"><p style="margin-bottom:0;font-size:${answers[i].count * 2 / vote_count * 5}vw">${answers[i].answer}</p></div>`);
+                }
+                organizeAnswersRandomPlaces();
+                break;
+            case 'abc_answer':
+                $('#answers').append('<div class="span6" id="answersList"></div>');
+                for (let i = 0; i < answers.length; i++) {
+                    let correct = false;
+                    switch (answers[i].answer) {
+                        case 'A':
+                            correct = question.answer.includes('A');
+                            answers[i].answer = question.a;
+                            break;
+                        case 'B':
+                            correct = question.answer.includes('B');
+                            answers[i].answer = question.b;
+                            break;
+                        case 'C':
+                            correct = question.answer.includes('C');
+                            answers[i].answer = question.c;
+                            break;
+                    }
+                    let color = correct ? '#25c525' : '#81bfff';
+                    $('#answersList').append(`<strong>${answers[i].answer}</strong><span style="float:right;">${answers[i].count}</span>
+                        <div class="progress active" style="height:2rem;">
+                            <div class="progress-bar" role="progressbar" style="background-color:${color};width:${(answers[i].count / vote_count) * 100}%" aria-valuenow="${answers[i].count}" aria-valuemin="0" aria-valuemax="1"></div>
+                        </div>
+                        <br>
+                    `);
+                }
+                break;
+        }
     }
 
     $(document).ready(function () {
