@@ -71,7 +71,7 @@ function isValidText(inputElement) {
         inputElement,
         regex,
         'Input cannot be empty.',
-        'Please enter a valid string.'
+        'Please enter a valid string beginning with an Uppercase letter.'
     );
 }
 
@@ -91,7 +91,7 @@ function isValidQuestion(inputElement) {
         inputElement,
         regex,
         'Question cannot be empty.',
-        'Please enter a valid question.'
+        'Please enter a valid question ending with "?".'
     );
 
 }
