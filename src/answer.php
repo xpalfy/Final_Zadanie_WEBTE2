@@ -1,10 +1,14 @@
 <?php
+$keyNotSet = false;
+$notActive = false;
+$doesntExist = false;
 
 require_once 'config.php';
 $conn = getDatabaseConnection();
 // get number from url
 if(!isset($_GET['key'])){
-    directBackToIndex();
+    $keyNotSet = true;
+    directBackToIndex($keyNotSet, $notActive, $doesntExist);
 }
 $qr_code = $_GET['key'];
 // get question from database
@@ -15,12 +19,14 @@ if ($result->num_rows == 0) {
     $sql = "SELECT * FROM abc_questions WHERE qr_code = '$qr_code'";
     $result = $conn->query($sql);
     if ($result->num_rows == 0) {
-        directBackToIndex();
+        $doesntExist = true;
+        directBackToIndex($keyNotSet, $notActive, $doesntExist);
     } else {
         // check if question is active
         $question = $result->fetch_assoc();
         if ($question['active'] == 0) {
-            directBackToIndex();
+            $notActive = true;
+            directBackToIndex($keyNotSet, $notActive, $doesntExist);
         }
     }
     $type = 'abc_answer';
@@ -29,18 +35,32 @@ if ($result->num_rows == 0) {
     // check if question is active
     $question = $result->fetch_assoc();
     if ($question['active'] == 0) {
-        directBackToIndex();
+        $notActive = true;
+        directBackToIndex($keyNotSet, $notActive, $doesntExist);
     }
 }
-function directBackToIndex()
+
+function directBackToIndex($keyNotSet, $notActive, $doesntExist)
 {
     if (session_status() === PHP_SESSION_NONE) {
         session_start();
     }
-    $_SESSION['toast'] = [
-        'type' => 'error',
-        'message' => 'Invalid key'
-    ];
+    if ($keyNotSet) {
+        $_SESSION['toast'] = [
+            'type' => 'error',
+            'message' => 'Invalid key!'
+        ];
+    } elseif ($notActive) {
+        $_SESSION['toast'] = [
+            'type' => 'error',
+            'message' => 'Question is not active!'
+        ];
+    } elseif ($doesntExist) {
+        $_SESSION['toast'] = [
+            'type' => 'error',
+            'message' => "Question doesn't exist!"
+        ];
+    }
     header('Location: ../index.php');
     exit();
 }
