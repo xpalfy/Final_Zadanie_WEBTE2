@@ -164,19 +164,16 @@ function directBackToIndex($keyNotSet, $notActive, $doesntExist)
     </div>
 </footer>
 <script>
-    const ws = new WebSocket('ws://yourserver:8282');
+    const ws = new WebSocket("wss://node116.webte.fei.stuba.sk/wss");
 
     ws.onopen = function() {
-        console.log('Connected to the WebSocket server');
-    };
+        getAnswers();
+    }
 
     ws.onmessage = function(event) {
         const data = JSON.parse(event.data);
-        updateAnswers(data);
-    };
-
-    ws.onclose = function() {
-        console.log('Disconnected from the WebSocket server');
+        console.log("Got data from server...", data.data);
+        updateAnswers(data.data);
     };
 
     function organizeAnswersRandomPlaces() {
@@ -202,7 +199,7 @@ function directBackToIndex($keyNotSet, $notActive, $doesntExist)
             if (good) {
                 answers[i].style.gridRow = row;
                 answers[i].style.gridColumn = col;
-                console.log(answers[i].style.gridRow, answers[i].style.gridColumn);
+                //console.log(answers[i].style.gridRow, answers[i].style.gridColumn);
                 i++;
             }
         }
@@ -261,6 +258,8 @@ function directBackToIndex($keyNotSet, $notActive, $doesntExist)
 
                 }
                 if(type === 'one_answer') organizeAnswersRandomPlaces();
+
+                ws.send(JSON.stringify({data: { answers: answers, vote_count: vote_count } }));
             },
             error: function (error) {
                 console.log(error);
@@ -277,6 +276,7 @@ function directBackToIndex($keyNotSet, $notActive, $doesntExist)
 
         switch (type) {
             case 'one_answer':
+                console.log("One answer q")
                 $('#answers').append('<div class="container" id="answersList"></div>');
                 for (let i = 0; i < answers.length; i++) {
                     $('#answersList').append(`<div class="answer"><p style="margin-bottom:0;font-size:${answers[i].count * 2 / vote_count * 5}vw">${answers[i].answer}</p></div>`);
@@ -316,7 +316,7 @@ function directBackToIndex($keyNotSet, $notActive, $doesntExist)
     $(document).ready(function () {
         let question = <?php echo json_encode($question); ?>;
         $('#Question_text').text(question.question);
-        getAnswers();
+        //getAnswers();
         //organizeAnswersRandomPlaces();
     });
 
