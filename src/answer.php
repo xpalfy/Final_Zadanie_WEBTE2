@@ -61,9 +61,15 @@ function directBackToIndex($keyNotSet, $notActive, $doesntExist)
             'message' => "Question doesn't exist!"
         ];
     }
-    header('Location: ../index.php');
+    header('Location: ../login.php');
     exit();
 }
+
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+$userType = $_SESSION['user']['type'] ?? null;
 ?>
 
 <!DOCTYPE html>
@@ -139,15 +145,35 @@ function directBackToIndex($keyNotSet, $notActive, $doesntExist)
                 data-target="#navbarNav" data-toggle="collapse" type="button">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="index.php">Menu</a>
-                </li>
-            </ul>
-        </div>
+
+        <?php if ($userType === 0): ?>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="logout.php">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        <?php elseif ($userType === 1): ?>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="logout.php">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        <?php else: ?>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.php">Menu</a>
+                    </li>
+                </ul>
+            </div>
+        <?php endif; ?>
     </div>
 </nav>
+
 <div class="container cont justify-content-center align-items-center">
     <div class="card bg-dark" style="width: 100%">
         <div class="card-body" style="display: flex; flex-direction: column; align-items: center; width: 100%">

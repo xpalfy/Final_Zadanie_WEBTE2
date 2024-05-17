@@ -61,6 +61,9 @@ check(['1']);
                     <a class="nav-link" href="profile.php">Profile</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="keyInput.php">Key Input</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="../logout.php">Logout</a>
                 </li>
             </ul>
