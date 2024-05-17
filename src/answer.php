@@ -270,7 +270,7 @@ function directBackToIndex($keyNotSet, $notActive, $doesntExist)
         let vote_count = data.vote_count;
         let type = '<?php echo $type; ?>';
 
-        $('#answers').empty(); // Clear existing answers
+        $('#answers').empty();
 
         switch (type) {
             case 'one_answer':
@@ -313,8 +313,6 @@ function directBackToIndex($keyNotSet, $notActive, $doesntExist)
     $(document).ready(function () {
         let question = <?php echo json_encode($question); ?>;
         $('#Question_text').text(question.question);
-        //getAnswers();
-        //organizeAnswersRandomPlaces();
     });
 
 
