@@ -125,6 +125,9 @@ $userType = $_SESSION['user']['type'] ?? null;
             color: #007bff;
         }
     }
+
+
+
 </style>
 <body>
 <script>
@@ -243,45 +246,6 @@ $userType = $_SESSION['user']['type'] ?? null;
                 let question = <?php echo json_encode($question); ?>;
                 let answers = data.answers;
                 let vote_count = data.vote_count;
-                let type = '<?php echo $type; ?>';
-                switch (type) {
-                    case 'one_answer':
-                        $('#answers').append(`<div class="container" id="answersList"></div>`);
-                        // append with the answers in a ul
-                        for (let i = 0; i < answers.length; i++) {
-                            $('#answersList').append(`<div class="answer"><p style="margin-bottom:0;font-size:${answers[i].count * 2 / vote_count *5}vw">${answers[i].answer}</p></div>`);
-                        }
-                        organizeAnswersRandomPlaces();
-                        break;
-                    case 'abc_answer':
-                        $('#answers').append(`<div class="span6" id="answersList"></div>`);
-                        // append with the answers in a ul
-                        for (let i = 0; i < answers.length; i++) {
-                            let correct = false;
-                            switch (answers[i].answer) {
-                                case 'A':
-                                    correct = question.answer.includes('A');
-                                    answers[i].answer = question.a;
-                                    break;
-                                case 'B':
-                                    correct = question.answer.includes('B');
-                                    answers[i].answer = question.b;
-                                    break;
-                                case 'C':
-                                    correct = question.answer.includes('C');
-                                    answers[i].answer = question.c;
-                                    break;
-                            }
-                            let color = correct ? '#25c525' : '#81bfff';
-                            $('#answersList').append(`<strong>${answers[i].answer}</strong><span style="float:right;">${answers[i].count}</span>
-                                <div class="progress active" style="height:2rem;">
-                                <div class="progress-bar" role="progressbar" style="background-color:${color};width:${(answers[i].count / vote_count) * 100}%" aria-valuenow="${answers[i].count}" aria-valuemin="0" aria-valuemax="1"></div>
-                                </div>
-                                <br>
-                        `);}
-                        break;
-                }
-
                 ws.send(JSON.stringify({data: { question: question, answers: answers, vote_count: vote_count } }));
             },
             error: function (error) {
@@ -308,31 +272,45 @@ $userType = $_SESSION['user']['type'] ?? null;
                 break;
             case 'abc_answer':
                 $('#answers').append('<div class="span6" id="answersList"></div>');
+                let widths = [];
                 for (let i = 0; i < answers.length; i++) {
                     let correct = false;
+                    let answerText = '';
+                    widths.push((answers[i].count / vote_count) * 100);
                     switch (answers[i].answer) {
                         case 'A':
-                            correct = question.answer.includes('A');
-                            answers[i].answer = question.a;
+                            correct = (question.answer === 'A')
+                            answerText = question.a;
                             break;
                         case 'B':
-                            correct = question.answer.includes('B');
-                            answers[i].answer = question.b;
+                            correct = (question.answer === 'B')
+                            answerText= question.b;
                             break;
                         case 'C':
-                            correct = question.answer.includes('C');
-                            answers[i].answer = question.c;
+                            correct = (question.answer === 'C')
+                            answerText = question.c;
                             break;
                     }
-                    let color = correct ? '#25c525' : '#81bfff';
-                    $('#answersList').append(`<strong>${answers[i].answer}</strong><span style="float:right;">${answers[i].count}</span>
-                        <div class="progress active" style="height:2rem;">
-                            <div class="progress-bar" role="progressbar" style="background-color:${color};width:${(answers[i].count / vote_count) * 100}%" aria-valuenow="${answers[i].count}" aria-valuemin="0" aria-valuemax="1"></div>
+                    let color = correct ? 'bg-success' : 'bg-danger';
+                    $('#answersList').append(`<strong>${answerText}</strong><span style="float:right;">${answers[i].count}</span>
+                        <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="height: 2rem">
+                            <div class="progress-bar ${color} progress-bar-striped progress-bar-animated" style="width: 0"></div>
                         </div>
                         <br>
                     `);
                 }
+                setTimeout(() => {
+                    setWidths(widths);
+                }, 500);
                 break;
+        }
+    }
+
+    function setWidths(widths) {
+        let progressBars = document.getElementsByClassName('progress-bar');
+        for (let i = 0; i < progressBars.length; i++) {
+            progressBars[i].style.width = `${widths[i]}%`;
+            progressBars[i].innerText = `${widths[i].toFixed(2)}%`;
         }
     }
 

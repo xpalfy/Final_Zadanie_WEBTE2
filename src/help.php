@@ -188,7 +188,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <p>
             With the Activate button, they can activate the question for voting. With the Deactivate button, they can deactivate the question and save the answers to archive.
             They can also Delete and Change their questions, show the Qr code of the question and see the archive results of the voting.
-            Registered users cannot participate in voting. They can also filter the questions by the Category and the Time when the question was created.
+            Registered users can participate in voting. They can also filter the questions by the Category and the Time when the question was created.
         </p>
         <p>
             A registered user can change their password by clicking on the "Profile" button in the top menu.
@@ -199,7 +199,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <hr style="background-color: white">
         <h2># Admin</h2>
         <p>
-            An admin is a user who has special permissions on our websit
+            An admin is a user who has special permissions on our website
             Admins can access the question page where they can create questions with Qr codes under any users name.
             They see all the questions created by all users and can filter them by the Category and the Time when the question was created and by the User.
             Admins can activate, deactivate, delete and change any question. They can also show the Qr code of the question and see the archive results of the voting.
