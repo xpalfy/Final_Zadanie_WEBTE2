@@ -28,13 +28,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sk">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Help</title>
+    <title>Pomocník</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-    <script src="js/regex.js"></script>
+    <script src="js/regexSK.js"></script>
     <script src="https://raw.githack.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.js"></script>
 </head>
 <style>
@@ -77,16 +77,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <a class="nav-link" href="index.php">Menu</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link align-middle px-0" id="authLink" onclick="showAuth()">Registration/Login</a>
+                    <a href="#" class="nav-link align-middle px-0" id="authLink" onclick="showAuth()">Registrácia/Prihlásenie</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link px-0 align-middle" id="joinLink" onclick="showJoin()">Join to Room</a>
+                    <a href="#" class="nav-link px-0 align-middle" id="joinLink" onclick="showJoin()">Pripojenie do izby</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link px-0 align-middle" id="rolesLink" onclick="showRoles()">Roles</a>
+                    <a href="#" class="nav-link px-0 align-middle" id="rolesLink" onclick="showRoles()">Roly</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link px-0 align-middle" onclick="downloadHelp()">Download Help</a>
+                    <a href="#" class="nav-link px-0 align-middle" onclick="downloadHelp()">Stiahnite si pomocníka</a>
                 </li>
             </ul>
         </div>
@@ -96,126 +96,126 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <div class="col py-3" id="content" style="background-color: #272b2f; height: auto; min-height: 100%">
     <div class="container" id="authentication" style="display: none">
         <hr style="background-color: white">
-        <h1># Registration</h1>
+        <h1># Registrácia</h1>
         <p>
-            Registration on our website is quick and easy! Start by clicking on the "Registration" button located in the top menu of the main page.
+        Registrácia na našej webovej stránke je rýchla a jednoduchá! Začnite kliknutím na tlačidlo "Registration", ktoré sa nachádza v hornom menu hlavnej stránky.
         </p>
         <hr>
         <img src="help_img/registration1.png" alt="Registration" class="img-thumbnail img-fluid" style="width: 50%; height: auto; margin-left: 25%">
-        <p style="text-align: center"><br>Registration button on main page</p>
+        <p style="text-align: center"><br>Tlačido "Registration" na hlavnej stránke</p>
         <hr>
         <p>
-            You will need to fill in a simple form with your name and a secure password.
-            Once you're registered, you can explore our site, access exclusive content and enjoy all the benefits of being a registered member.
+            Musíte vyplniť jednoduchý formulár so svojím menom a bezpečným heslom.
+            Po registrácii si môžete prezrieť našu stránku, získať prístup k exkluzívnemu obsahu a využívať všetky výhody registrovaného používateľa.
         </p>
         <hr>
         <img src="help_img/registration2.png" alt="Registration" class="img-thumbnail img-fluid" style="width: 50%; height: auto; margin-left: 25%">
-        <p style="text-align: center"><br>Registration form</p>
+        <p style="text-align: center"><br>Registračný formulár</p>
         <hr style="background-color: white"><br><br><br>
-        <h1># Login</h1>
+        <h1># Prihlásenie</h1>
         <p>
-            If you are already a registered user, you can log in to your account by clicking on the "Login" button located in the top menu of the main page.
-            You will need to enter your username and password to access your account.
+            Ak ste už registrovaným používateľom, môžete sa prihlásiť do svojho účtu kliknutím na tlačidlo "Login", ktoré sa nachádza v hornom menu hlavnej stránky.
+            Na prístup k svojmu účtu budete musieť zadať svoje používateľské meno a heslo.
         </p>
         <p>
-            Once you're logged in, the website will show you a welcome message with your username and the current time.
+            Po prihlásení sa na webovej stránke zobrazí uvítacia správa s vaším používateľským menom a aktuálnym časom.
         </p>
         <hr>
         <img src="help_img/login1.png" alt="Login" class="img-thumbnail img-fluid" style="width: 50%; height: auto; margin-left: 25%">
-        <p style="text-align: center"><br>Welcome message for registered user</p>
+        <p style="text-align: center"><br>Uvítacia správa pre registrovaného používateľa</p>
         <hr>
         <br>
     </div>
     <div class="container" id="roomJoin" style="display: none;">
         <hr style="background-color: white">
-        <h1># Join to Room</h1>
+        <h1># Pripojenie do izby</h1>
         <p>
-            To join a room, you need to scan the QR code with your mobile device.
-            If you don't have a camera to scan the QR code, you can enter the room key manually, or just type the 5 letter key to the URL : <a href="https://node84.webte.fei.stuba.sk:1000/12345" class="link">https://node84.webte.fei.stuba.sk:1000/12345</a>.
+            Ak sa chcete pripojiť do izby, musíte pomocou mobilného zariadenia naskenovať QR kód.
+            Ak nemáte fotoaparát na skenovanie kódu QR, môžete kľúč miestnosti zadať ručne alebo stačí zadať 5-písmenový kľúč na adresu URL : <a href="https://node84.webte.fei.stuba.sk:1000/12345" class="link">https://node84.webte.fei.stuba.sk:1000/12345</a>.
         </p>
         <hr><br><br><br><br><br>
         <img src="help_img/join1.png" alt="Join to Room" class="img-thumbnail img-fluid" style="width: 50%; height: auto; margin-left: 25%">
-        <p style="text-align: center"><br>QR code for room</p>
+        <p style="text-align: center"><br>QR kód izby</p>
         <hr style="background-color: white">
-        <h1># Voting</h1>
+        <h1># Hlasovanie</h1>
         <p>
-            Once you have joined the room, you can start voting on the question.
-            The question will appear on the screen. It can be a self-answer question or a multiple-choice question.
+            Po vstupe do izby môžete začať hlasovať o otázke.
+            Otázka sa zobrazí na obrazovke. Môže to byť otázka s jednou odpoveďou alebo otázka s viacerými možnosťami.
         </p>
         <hr>
         <img src="help_img/voting1.png" alt="Voting" class="img-thumbnail img-fluid" style="width: 50%; height: auto; margin-left: 25%">
         <img src="help_img/voting2.png" alt="Voting" class="img-thumbnail img-fluid" style="width: 50%; height: auto; margin-left: 25%">
-        <p style="text-align: center"><br>Question types for voting</p>
+        <p style="text-align: center"><br>Typy otázok v izbe</p>
         <hr<br<br>
         <p>
-            For a self-answer question you have to fill in the answer yourself, for a multiple choice question you have to choose the correct answer.
-            To submit the answer, press the "Submit" button.
-            The page will automatically redirect to the voting results page where you can see the results in real time.
+            V prípade otázky s jednou odpoveďou musíte odpoveď vyplniť sami, v prípade otázky s výberom odpovede musíte vybrať správnu odpoveď.
+            Ak chcete odoslať odpoveď, stlačte tlačidlo "Submit".
+            Stránka sa automaticky presmeruje na stránku s výsledkami hlasovania, kde si môžete pozrieť výsledky v reálnom čase.
         </p>
         <hr style="background-color: white">
-        <h1># Voting Results</h1>
+        <h1># Výsledky hlasovania</h1>
         <p>
-            After submitting the answer, you will be redirected to the voting results page.
-            Here you can see the results of the vote in real time.
+            Po odoslaní odpovede budete presmerovaní na stránku s výsledkami hlasovania.
+            Tu si môžete pozrieť výsledky v reálnom čase.
         </p>
         <hr>
         <img src="help_img/answer1.png" alt="Voting Results" class="img-thumbnail img-fluid" style="width: 50%; height: auto; margin-left: 25%">
         <img src="help_img/answer2.png" alt="Voting Results" class="img-thumbnail img-fluid" style="width: 50%; height: auto; margin-left: 25%">
-        <p style="text-align: center"><br>Voting results</p>
+        <p style="text-align: center"><br>Výsledky hlasovania</p>
     </div>
     <div class="container" id="roles" style="display: none">
         <hr style="background-color: white">
-        <h1># Roles</h1>
+        <h1># Roly</h1>
         <p>
-            Our website has three types of users: <strong>Guest</strong>, <strong>Registered User</strong> and <strong>Admin</strong>.
-            Every user has different permissions and access to the website.
+            Naša webová stránka má tri typy používateľov: <strong>Guest</strong>, <strong>Registrovaný používateľ</strong> a <strong>Administrátor</strong>.
+            Každý používateľ má iné oprávnenia a prístup na webovej stránke.
         </p>
         <hr style="background-color: white">
         <h2># Guest</h2>
         <p>
-            A guest is a user who is not registered on our website. Guests can only access the main page and the registration form.
-            They can access the voting page with the correct code.
+            Guest je používateľ, ktorý nie je registrovaný na webovej stránke. Guesty majú prístup len na hlavnú stránku a k registračnému formuláru.
+            Na stránku s hlasovaním sa dostanú po zadaní správneho kódu.
         </p>
         <hr style="background-color: white">
-        <h2># Registered User</h2>
+        <h2># Registrovaný používateľ</h2>
         <p>
-            A registered user is a user who has successfully registered on our website.
-            Registered users can access the question page where they can create questions with QR codes.
+            Registrovaný používateľ je používateľ, ktorý sa úspešne zaregistroval na našej webovej stránke.
+            Registrovaní používatelia majú prístup na stránku s otázkami, kde môžu vytvárať nové otázky s QR kódmi.
         </p>
         <hr>
         <img src="help_img/prouser1.png" alt="Question page" class="img-thumbnail img-fluid" style="width: 100%; height: auto;">
-        <p style="text-align: center"><br>Question page for registered user</p>
+        <p style="text-align: center"><br>Stránka s otázkami pre registrovaného používateľa</p>
         <p>
-            With the Activate button, they can activate the question for voting. With the Deactivate button, they can deactivate the question and save the answers to archive.
-            They can also Delete and Change their questions, show the QR code of the question and see the archive results of the voting.
-            Registered users can participate in voting. They can also filter the questions by the Category and the Time when the question was created.
+            Pomocou tlačidla "Aktivovať" môžu aktivovať otázku na hlasovanie. Pomocou tlačidla "Deaktivovať" môžu otázku deaktivovať a uložiť odpovede do archívu.
+            Môžu tiež odstrániť a zmeniť svoje otázky, zobraziť QR kód otázky a zobraziť archívne výsledky hlasovania.
+            Registrovaní používatelia sa môžu zúčastniť na hlasovaní. Môžu tiež filtrovať otázky podľa kategórie a času, kedy bola otázka vytvorená.
         </p>
         <p>
-            A registered user can change their password by clicking on the "Profile" button in the top menu.
+            Registrovaný používateľ si môže zmeniť heslo kliknutím na tlačidlo "Môj Profil" v hornom menu.
         </p>
         <hr><br><br><br><br><br><br><br><br>
         <img src="help_img/profile1.png" alt="Profile" class="img-thumbnail img-fluid" style="width: 50%; height: auto; margin-left: 25%">
-        <p style="text-align: center"><br>Profile page for registered user</p>
+        <p style="text-align: center"><br>Profilová stránka pre registrovaného používateľa</p>
         <hr style="background-color: white">
-        <h2># Admin</h2>
+        <h2># Administrátor</h2>
         <p>
-            An admin is a user who has special permissions on our website
-            Admins can access the question page where they can create questions with QR codes under any users name.
-            They see all the questions created by all users and can filter them by the Category and the Time when the question was created and by the User.
-            Admins can activate, deactivate, delete and change any question. They can also show the QR code of the question and see the archive results of the voting.
+            Administrátor je používateľ, ktorý má na našej webovej stránke špeciálne oprávnenia.
+            Administrátori majú prístup na stránku s otázkami, kde môžu vytvárať otázky s QR kódmi pod menom ľubovoľného používateľa.
+            Vidia všetky otázky vytvorené všetkými používateľmi a môžu ich filtrovať nielen podľa kategórie a času vytvorenia otázky, ale aj podľa používateľa.
+            Administrátori môžu aktivovať, deaktivovať, vymazať a zmeniť akúkoľvek otázku. Môžu tiež zobraziť QR kód otázky a vidieť archívne výsledky hlasovania.
         </p>
         <hr>
         <img src="help_img/admin1.png" alt="Question page" class="img-thumbnail img-fluid" style="width: 100%; height: auto;">
-        <p style="text-align: center"><br>Question page for admin</p>
+        <p style="text-align: center"><br>Stránka s otázkami pre administrátora</p>
         <hr>
         <p>
-            Admins can access the Users page where they can see all the registered users.
-            They can search the users by the Username.
-            They can also change the role of the users to Admin or Registered User, change the password and username of the users and delete the users.
+            Administrátori majú prístup na stránku "Používatelia", kde môžu vidieť všetkých registrovaných používateľov.
+            Používateľov môžu vyhľadávať podľa používateľského mena.
+            Môžu tiež zmeniť rolu používateľov na administrátora alebo registrovaného používateľa, zmeniť heslo a používateľské meno používateľov a odstrániť používateľov.
         </p>
         <hr>
         <img src="help_img/admin2.png" alt="Users" class="img-thumbnail img-fluid" style="width: 100%; height: auto;">
-        <p style="text-align: center"><br>Users page for admin</p>
+        <p style="text-align: center"><br>Stránka "Používatelia" pre administrátora</p>
         <hr>
     </div>
 </div>
