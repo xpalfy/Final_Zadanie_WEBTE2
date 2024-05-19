@@ -62,13 +62,13 @@ function directBackToIndex($keyNotSet, $notActive, $doesntExist)
         ];
     }
 
-    if ($_SESSION['user']['type'] == 0) {
-        if ($_SESSION['slovak'] === true) {
+    if (isset($_SESSION['user']) && $_SESSION['user']['type'] == 0) {
+        if (isset($_SESSION['slovak']) && $_SESSION['slovak'] === true) {
             header('Location: ./admin/keyInputSK.php');
         } else {
             header('Location: ./admin/keyInput.php');
         }
-    } else if ($_SESSION['user']['type'] == 1) {
+    } else if (isset($_SESSION['user']) && $_SESSION['user']['type'] == 1) {
         if ($_SESSION['slovak'] === true) {
             header('Location: ./pro_user/keyInputSK.php');
         } else {
