@@ -77,6 +77,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <a class="nav-link" href="index.php">Menu</a>
                 </li>
                 <li class="nav-item">
+                    <a href="help.php" class="nav-link align-middle px-0">Anglická Verzia</a>
+                </li>
+                <li class="nav-item">
                     <a href="#" class="nav-link align-middle px-0" id="authLink" onclick="showAuth()">Registrácia/Prihlásenie</a>
                 </li>
                 <li class="nav-item">
