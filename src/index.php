@@ -1,9 +1,9 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 function redirectUser($key)
 {
-    if (session_status() === PHP_SESSION_NONE) {
-        session_start();
-    }
 
 
     if (!preg_match('/^[a-zA-Z0-9]{5}$/', $key)) {

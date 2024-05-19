@@ -5,7 +5,7 @@ if (session_status() === PHP_SESSION_NONE) {
 require '../../checkType.php';
 require '../../config.php';
 
-check(['1']);
+check(['0']);
 $conn = getDatabaseConnection();
 if ($_SERVER['REQUEST_METHOD'] === 'POST'){
     $data = json_decode(file_get_contents('php://input'), true);

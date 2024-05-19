@@ -110,8 +110,8 @@ check(['0']);
                     <div class="form-group">
                         <label for="userType">Select user type:</label>
                         <select class="form-control" id="addUserTypeModal" name="addUserTypeModal" required>
-                            <option value="1" selected>Admin</option>
-                            <option value="2">Pro User</option>
+                            <option value="0" selected>Admin</option>
+                            <option value="1">Pro User</option>
                         </select>
                     </div>
                     <div class="form-group">
